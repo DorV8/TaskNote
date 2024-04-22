@@ -63,11 +63,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Model\" />
-	  <Folder Include="ViewModel\" />
-	</ItemGroup>
-
-	<ItemGroup>
 	  <MauiXaml Update="NotesMenuPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

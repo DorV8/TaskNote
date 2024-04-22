@@ -19,8 +19,17 @@
                     HorizontalOptions="EndAndExpand"
                     />
         </Grid>
-        <Label Text="Хэхэй!!!!!!" 
-               VerticalOptions="Center"
-               Grid.Row="1"/>
+        <ScrollView Grid.Row="1">
+            <ListView x:Name="NotesList">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid RowDefinitions="Auto, Auto">
+                            <Label Text="{Binding NoteText}"
+                                   TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"/>
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </ScrollView>
     </Grid>
 </ContentPage>
