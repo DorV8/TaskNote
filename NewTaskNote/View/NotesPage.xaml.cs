@@ -9,10 +9,14 @@ public partial class NotesPage : ContentPage
 		InitializeComponent();
 		//Shell.FlyoutContentProperty = ;
 
-		NotesList.BindingContext = instanse;
+		NotesList.BindingContext = instanse.Data;
 		NotesList.ItemsSource = instanse.Data.AllNotes;
 
 		
 	}
 
+    private void ContentPage_Appearing(object sender, EventArgs e)
+    {
+
+    }
 }

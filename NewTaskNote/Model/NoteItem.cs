@@ -30,6 +30,36 @@ namespace NewTaskNote
 
         public CategoryKind Category;
 
+        public Color Color
+        {
+            get
+            {
+                Color result = Color.FromRgb(255, 255, 255);
+                switch (Category)
+                {
+                    case CategoryKind.Undefined:
+                        result = Color.FromRgb(255, 255, 255);
+                        break;
+                    case CategoryKind.White:
+                        result = Color.FromRgb(255, 255, 255);
+                        break;
+                    case CategoryKind.Green:
+                        result = Color.FromRgb(0, 128, 0);
+                        break;
+                    case CategoryKind.Yellow:
+                        result = Color.FromRgb(255, 255, 0);
+                        break;
+                    case CategoryKind.Red:
+                        result = Color.FromRgb(255, 0, 0);
+                        break;
+                    case CategoryKind.Blue:
+                        result = Color.FromRgb(0, 0, 255);
+                        break;
+                }
+                return result;
+            }
+        }
+
         public NoteItem()
         {
             ModDate = DateTime.Now;
