@@ -29,34 +29,62 @@ namespace NewTaskNote
         }
 
         public CategoryKind Category;
-
-        public Color Color
+        public int CategoryId
         {
             get
             {
-                Color result = Color.FromRgb(255, 255, 255);
+                var id = -1;
                 switch (Category)
                 {
                     case CategoryKind.Undefined:
-                        result = Color.FromRgb(255, 255, 255);
+                        id = -1;
                         break;
                     case CategoryKind.White:
-                        result = Color.FromRgb(255, 255, 255);
+                        id = 0;
                         break;
                     case CategoryKind.Green:
-                        result = Color.FromRgb(0, 128, 0);
+                        id = 1;
                         break;
                     case CategoryKind.Yellow:
-                        result = Color.FromRgb(255, 255, 0);
+                        id = 2;
                         break;
                     case CategoryKind.Red:
-                        result = Color.FromRgb(255, 0, 0);
+                        id = 3;
                         break;
                     case CategoryKind.Blue:
-                        result = Color.FromRgb(0, 0, 255);
+                        id = 4;
                         break;
                 }
-                return result;
+                return id;
+            }
+        }
+        public Color ColorCategory
+        {
+            get
+            {
+                Color id = Color.FromRgb(255, 255, 255);
+                switch (Category)
+                {
+                    case CategoryKind.Undefined:
+                        id = Color.FromRgb(255, 255, 255);
+                        break;
+                    case CategoryKind.White:
+                        id = Color.FromRgb(255, 255, 255);
+                        break;
+                    case CategoryKind.Green:
+                        id = Color.FromRgb(0, 128, 0);
+                        break;
+                    case CategoryKind.Yellow:
+                        id = Color.FromRgb(255, 255, 0);
+                        break;
+                    case CategoryKind.Red:
+                        id = Color.FromRgb(255, 0, 0);
+                        break;
+                    case CategoryKind.Blue:
+                        id = Color.FromRgb(0, 0, 255);
+                        break;
+                }
+                return id;
             }
         }
 

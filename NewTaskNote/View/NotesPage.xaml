@@ -22,12 +22,13 @@
         </Grid>
         <ScrollView Grid.Row="1">
             <ListView x:Name="NotesList"
-                      BindingContext="{Binding AllNotes}">
+                      BindingContext="{Binding AllNotes}"
+                      ItemSelected="NotesList_ItemSelected">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
                             <Grid RowDefinitions="Auto, Auto"
-                                  BackgroundColor="{Binding Color}">
+                                  BackgroundColor="{Binding ColorCategory}">
                                 <Label Text="{Binding NoteText}"
                                        TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
                             </Grid>

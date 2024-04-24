@@ -19,4 +19,10 @@ public partial class NotesPage : ContentPage
     {
 
     }
+
+    private async void NotesList_ItemSelected(object sender, SelectedItemChangedEventArgs e)
+    {
+        var note = NotesList.SelectedItem as NoteItem;
+        await Navigation.PushModalAsync(new NotePage(note));
+    }
 }
