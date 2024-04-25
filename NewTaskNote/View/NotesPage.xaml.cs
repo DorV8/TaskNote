@@ -15,14 +15,19 @@ public partial class NotesPage : ContentPage
 		
 	}
 
-    private void ContentPage_Appearing(object sender, EventArgs e)
-    {
-
-    }
 
     private async void NotesList_ItemSelected(object sender, SelectedItemChangedEventArgs e)
     {
-        var note = NotesList.SelectedItem as NoteItem;
-        await Navigation.PushModalAsync(new NotePage(note));
+        if (e.SelectedItem != null)
+        {
+            var note = NotesList.SelectedItem as NoteItem;
+            NotesList.SelectedItem = null;
+            await Navigation.PushModalAsync(new NotePage(note));
+        }
+    }
+
+    private async void AddButton_Clicked(object sender, EventArgs e)
+    {
+        await Navigation.PushModalAsync(new NotePage());
     }
 }

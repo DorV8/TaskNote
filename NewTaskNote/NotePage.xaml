@@ -19,7 +19,8 @@
             </HorizontalStackLayout>
             <Picker Grid.Row="2"
                     x:Name="CategoryPicker"
-                    Title="Категория"/>
+                    Title="Категория"
+                    SelectedIndexChanged="CategoryPicker_SelectedIndexChanged"/>
         </Grid>
         <StackLayout Grid.Row="1"
               Orientation="Horizontal"

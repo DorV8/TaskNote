@@ -2,9 +2,8 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="NewTaskNote.NotesPage"
-             Appearing="ContentPage_Appearing"
              >
-    <Grid RowDefinitions="Auto, *">
+    <Grid RowDefinitions="Auto, *, Auto">
         <Grid ColumnDefinitions="*, *"
               Grid.Row="0"
               BackgroundColor="LightGray">
@@ -37,5 +36,9 @@
                 </ListView.ItemTemplate>
             </ListView>
         </ScrollView>
+        <Button Text="Добавить"
+                Grid.Row="2"
+                x:Name="AddButton"
+                Clicked="AddButton_Clicked"/>
     </Grid>
 </ContentPage>
