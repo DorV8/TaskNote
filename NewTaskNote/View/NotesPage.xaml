@@ -13,10 +13,11 @@
                    VerticalOptions="Center"
                    Margin="15,0,0,0"
                    FontSize="Large"/>
-            <Picker Title="сортировка"
+            <Picker Title="Сортировка"
                     x:Name="MenuPicker"
                     Grid.Column="1"
                     HorizontalOptions="EndAndExpand"
+                    SelectedIndexChanged="MenuPicker_SelectedIndexChanged"
                     />
         </Grid>
         <ScrollView Grid.Row="1">
