@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="NewTaskNote.NotesPage"
              >
-    <Grid RowDefinitions="Auto, *, Auto">
+    <Grid RowDefinitions="Auto, Auto, *, Auto">
         <Grid ColumnDefinitions="*, *"
               Grid.Row="0"
               BackgroundColor="LightGray">
@@ -20,7 +20,12 @@
                     SelectedIndexChanged="MenuPicker_SelectedIndexChanged"
                     />
         </Grid>
-        <ScrollView Grid.Row="1">
+        <Entry Grid.Row="1"
+               x:Name="SearchEntry"
+               Placeholder="Поиск"
+               Text=""
+               TextChanged="SearchEntry_TextChanged"/>
+        <ScrollView Grid.Row="2">
             <ListView x:Name="NotesList"
                       BindingContext="{Binding AllNotes}"
                       ItemSelected="NotesList_ItemSelected">
@@ -38,7 +43,7 @@
             </ListView>
         </ScrollView>
         <Button Text="Добавить"
-                Grid.Row="2"
+                Grid.Row="3"
                 x:Name="AddButton"
                 Clicked="AddButton_Clicked"/>
     </Grid>

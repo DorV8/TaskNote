@@ -13,10 +13,11 @@ public partial class NotesPage : ContentPage
 		NotesList.ItemsSource = instanse.Data.AllNotes;
 
         UpdateSortOptions();
+
 	}
     protected override bool OnBackButtonPressed()
     {
-        if (MenuPicker.SelectedIndex == -1)
+        if ((MenuPicker.SelectedIndex == -1) && (SearchEntry.Text == ""))
         {
             return false;
         }
@@ -24,6 +25,7 @@ public partial class NotesPage : ContentPage
         {
             MenuPicker.SelectedIndex = -1;
             MenuPicker.SelectedItem = null;
+            SearchEntry.Text = "";
             NotesList.ItemsSource = instanse.Data.AllNotes;
             return true;
         }
@@ -58,7 +60,23 @@ public partial class NotesPage : ContentPage
 
     private void MenuPicker_SelectedIndexChanged(object sender, EventArgs e)
     {
-        instanse.Data.SortNotes(MenuPicker.SelectedIndex);
+        SortNotes();
+    }
+
+    private void SearchEntry_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        if (SearchEntry.Text != "")
+        {
+            SortNotes();
+        }
+        else
+        {
+            NotesList.ItemsSource = instanse.Data.AllNotes;
+        }
+    }
+    private void SortNotes()
+    {
+        instanse.Data.SortNotes(MenuPicker.SelectedIndex, SearchEntry.Text);
         NotesList.ItemsSource = instanse.Data.SelectedNotes;
     }
 }

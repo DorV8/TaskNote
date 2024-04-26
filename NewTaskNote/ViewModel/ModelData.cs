@@ -27,7 +27,7 @@ namespace NewTaskNote
             AllNotes.Remove(item);
         }
 
-        public void SortNotes(int CategoryId)
+        public void SortNotes(int CategoryId, string TextPiece)
         {
             IEnumerable<NoteItem> filtered = null;
             switch (CategoryId)
@@ -53,6 +53,10 @@ namespace NewTaskNote
                 case 5:
                     filtered = AllNotes.Where(note => note.IsFavorite == true);
                     break;
+            }
+            if (TextPiece != "")
+            {
+                filtered = filtered.Where(note => note.NoteText.ToUpper().Contains(TextPiece.ToUpper()));
             }
             SelectedNotes = new ObservableCollection<NoteItem>(filtered);
         }
