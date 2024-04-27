@@ -3,10 +3,46 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="NewTaskNote.TaskPage"
              Title="TaskPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+    <Grid
+        RowDefinitions="Auto, Auto, Auto, *, Auto">
+        <Entry x:Name="HeaderEntry"
+               Text="{Binding TaskHeader}"
+               Grid.Row="0"
+               IsReadOnly="True"
+               />
+        <Entry x:Name="DescEntry"
+               Text="{Binding TaskDesc}"
+               Grid.Row="1"
+               IsReadOnly="True" />
+        <BoxView Color="Transparent"
+                 HeightRequest="5"
+                 Grid.Row="2"/>
+        <ScrollView Grid.Row="3">
+            <ListView x:Name="StagesList">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Grid
+                                RowDefinitions="Auto, Auto"
+                                ColumnDefinitions="Auto, Auto">
+                                <CheckBox IsChecked="{Binding IsCompleted}"
+                                          Grid.RowSpan="2"
+                                          Grid.Column="0"/>
+                                <Label Text="{Binding TaskStageHeader}"
+                                       Grid.Column="1"
+                                       Grid.Row="0"/>
+                                <Label Text="{Binding TaskStageDesc}"
+                                       Grid.Column="1"
+                                       Grid.Row="1" />
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>    
+            </ListView>
+        </ScrollView>
+        <Button Text="+"
+                x:Name="AddStageButton"
+                Clicked="AddStageButton_Clicked" 
+                Grid.Row="4"/>
+    </Grid>
 </ContentPage>

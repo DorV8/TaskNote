@@ -18,6 +18,8 @@ namespace NewTaskNote
         
         public TaskItem CurrentTask { get; set; }
 
+        public TaskItem EditedTask { get; set; }
+
         //****************************************************
 
         public ModelData()
@@ -82,15 +84,6 @@ namespace NewTaskNote
         public void RemoveTask(TaskItem item)
         {
             AllTasks.Remove(item);
-        }
-
-        public void AddStage(TaskStageItem item)
-        {
-            CurrentTask.AllStages.Add(item);
-        }
-        public void RemoveStage(TaskStageItem item)
-        {
-            CurrentTask.AllStages.Remove(item);
         }
     }
 }

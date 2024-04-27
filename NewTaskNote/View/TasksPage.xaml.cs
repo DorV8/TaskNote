@@ -31,4 +31,14 @@ public partial class TasksPage : ContentPage
 
         }
     }
+
+    private async void TasksList_ItemSelected(object sender, SelectedItemChangedEventArgs e)
+    {
+        if (e.SelectedItem != null)
+        {
+            instanse.Data.CurrentTask = TasksList.SelectedItem as TaskItem;
+            TasksList.SelectedItem = null;
+            await Navigation.PushModalAsync(new TaskPage());
+        }
+    }
 }
