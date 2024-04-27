@@ -2,7 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="NewTaskNote.TasksPage">
-    <Grid RowDefinitions="Auto, *">
+    <Grid RowDefinitions="Auto, *, Auto">
         <Grid ColumnDefinitions="*, *"
               Grid.Row="0"
               BackgroundColor="LightGray">
@@ -24,8 +24,7 @@
                     <DataTemplate>
                         <ViewCell>
                             <Grid RowDefinitions="Auto, Auto"
-                                  ColumnDefinitions="Auto, *"
-                                  ColumnSpacing="5">
+                                  ColumnDefinitions="*, Auto">
                                 <Label Text="{Binding TaskHeader}"
                                            TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"
                                            Grid.Row="0"
@@ -38,7 +37,7 @@
                                        Grid.Column="1"
                                        HorizontalTextAlignment="Center"
                                        VerticalTextAlignment="Center"
-                                       BackgroundColor="Aqua">
+                                       Margin="5">
                                     <Label.Text>
                                         <MultiBinding StringFormat="{}{0} из {1}">
                                             <Binding Path="StageProgress" />
@@ -52,5 +51,11 @@
                 </ListView.ItemTemplate>
             </ListView>
         </ScrollView>
+        <Button Text="+"
+                Grid.Row="2"
+                HorizontalOptions="Center"
+                VerticalOptions="End"
+                x:Name="AddTaskButton"
+                Clicked="AddTaskButton_Clicked"/>
     </Grid>
 </ContentPage>
