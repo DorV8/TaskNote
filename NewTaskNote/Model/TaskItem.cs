@@ -13,7 +13,6 @@ namespace NewTaskNote
         public bool IsFinished
         {
             get { return StageProgress == StageCount; }
-            set { IsFinished = value; }
         }
         public bool IsFavorite { get; set; }
 
@@ -21,7 +20,11 @@ namespace NewTaskNote
 
         public int StageCount { get { return AllStages.Count; } }
 
-        public int StageProgress { get { return AllStages.Count(stage => stage.IsCompleted); } }
+        public int StageProgress 
+        {
+            get { return AllStages.Count(stage => stage.IsCompleted); }
+            set { StageProgress = value; }
+        }
 
         public DateTime AlarmDate { get; set; }
 

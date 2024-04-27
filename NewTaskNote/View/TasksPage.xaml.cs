@@ -41,4 +41,5 @@ public partial class TasksPage : ContentPage
             await Navigation.PushModalAsync(new TaskPage());
         }
     }
+
 }

@@ -41,4 +41,19 @@ public partial class TaskPage : ContentPage
         Navigation.PopModalAsync();
         return true;
     }
+
+    private async void FinishTask_Clicked(object sender, EventArgs e)
+    {
+        var answer = await DisplayAlert("Завершение", "Хотите завершить задачу?", "Да", "Нет");
+        if (answer == true)
+        {
+            foreach (var stage in instanse.Data.EditedTask.AllStages)
+            {
+                stage.IsCompleted = true;
+            }
+            var index = instanse.Data.AllTasks.IndexOf(instanse.Data.CurrentTask);
+            instanse.Data.AllTasks[index] = instanse.Data.EditedTask;
+            Navigation.PopModalAsync();
+        }
+    }
 }

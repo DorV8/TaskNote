@@ -4,7 +4,7 @@
              x:Class="NewTaskNote.TaskPage"
              Title="TaskPage">
     <Grid
-        RowDefinitions="Auto, Auto, Auto, *, Auto">
+        RowDefinitions="Auto, Auto, Auto, *, Auto, Auto">
         <Entry x:Name="HeaderEntry"
                Text="{Binding TaskHeader}"
                Grid.Row="0"
@@ -43,6 +43,15 @@
         <Button Text="+"
                 x:Name="AddStageButton"
                 Clicked="AddStageButton_Clicked" 
-                Grid.Row="4"/>
+                HorizontalOptions="Center"
+                VerticalOptions="End"
+                Grid.Row="4"
+                Margin="10"/>
+        <Button Text="Завершить задачу"
+                x:Name="FinishTask"
+                Clicked="FinishTask_Clicked"
+                VerticalOptions="End"
+                Grid.Row="5"
+                Margin="5"/>
     </Grid>
 </ContentPage>
