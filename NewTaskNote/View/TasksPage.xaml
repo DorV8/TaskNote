@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="NewTaskNote.TasksPage"
-             Title="TasksPage">
+             x:Class="NewTaskNote.TasksPage">
     <Grid RowDefinitions="Auto, *">
         <Grid ColumnDefinitions="*, *"
               Grid.Row="0"
               BackgroundColor="LightGray">
-            <Label Text="Заметки"
+            <Label Text="Задачи"
                    HorizontalOptions="Start"
                    Grid.Column="0"
                    VerticalOptions="Center"
@@ -18,8 +17,40 @@
                     Grid.Column="1"
                     HorizontalOptions="EndAndExpand" />
         </Grid>
-        <Label Text="Хэхэй!!!!!!"
-               VerticalOptions="Center"
-               Grid.Row="1" />
+        <ScrollView Grid.Row="1">
+            <ListView x:Name="TasksList"
+                      BindingContext="AllTasks">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Grid RowDefinitions="Auto, Auto"
+                                  ColumnDefinitions="Auto, *"
+                                  ColumnSpacing="5">
+                                <Label Text="{Binding TaskHeader}"
+                                           TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"
+                                           Grid.Row="0"
+                                           Grid.Column="0" />
+                                <Label Text="{Binding TaskDesc}"
+                                       TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"
+                                       Grid.Row="1"
+                                       Grid.Column="0" />
+                                <Label Grid.RowSpan="2"
+                                       Grid.Column="1"
+                                       HorizontalTextAlignment="Center"
+                                       VerticalTextAlignment="Center"
+                                       BackgroundColor="Aqua">
+                                    <Label.Text>
+                                        <MultiBinding StringFormat="{}{0} из {1}">
+                                            <Binding Path="StageProgress" />
+                                            <Binding Path="StageCount" />
+                                        </MultiBinding>
+                                    </Label.Text>
+                                </Label>
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </ScrollView>
     </Grid>
 </ContentPage>

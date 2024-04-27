@@ -11,11 +11,22 @@ namespace NewTaskNote
 
         public NoteItem CurrentNote { get; set; }
         public NoteItem EditedNote { get; set; }
+        
+        //****************************************************
+
+        public ObservableCollection<TaskItem> AllTasks { get; set; }
+        
+        public TaskItem CurrentTask { get; set; }
+
+        //****************************************************
 
         public ModelData()
         {
             AllNotes = new ObservableCollection<NoteItem>();
+            AllTasks = new ObservableCollection<TaskItem>();
         }
+
+        //****************************************************
 
         public void AddNote(NoteItem item)
         {
@@ -59,6 +70,27 @@ namespace NewTaskNote
                 filtered = filtered.Where(note => note.NoteText.ToUpper().Contains(TextPiece.ToUpper()));
             }
             SelectedNotes = new ObservableCollection<NoteItem>(filtered);
+        }
+
+        //****************************************************
+
+        public void AddTask(TaskItem item)
+        {
+            AllTasks.Add(item);
+        }
+
+        public void RemoveTask(TaskItem item)
+        {
+            AllTasks.Remove(item);
+        }
+
+        public void AddStage(TaskStageItem item)
+        {
+            CurrentTask.AllStages.Add(item);
+        }
+        public void RemoveStage(TaskStageItem item)
+        {
+            CurrentTask.AllStages.Remove(item);
         }
     }
 }

@@ -21,6 +21,7 @@ namespace NewTaskNote
         {
             Data = new ModelData();
             AddNotesSample();
+            AddTasksSample();
         }
 
         private int notesSampleGroup = 0;
@@ -32,6 +33,31 @@ namespace NewTaskNote
             {
                 Data.AddNote(note);
             }
+        }
+
+        public void AddTasksSample()
+        {
+            foreach(var task in GetSampleTasks())
+            {
+                Data.AddTask(task);
+            }
+        }
+
+        public List<TaskItem> GetSampleTasks()
+        {
+            List<TaskItem> result = [];
+
+            for (var i = 0; i < 10; i++)
+            {
+                result.Add(new TaskItem()
+                {
+                    TaskHeader = String.Format("Название {0}", i),
+                    TaskDesc = String.Format("Описание задачи под номером {0}",i)
+                }
+                );
+            }
+
+            return result;
         }
 
         public List<NoteItem> GetSampleNotes(int groupIndex)
