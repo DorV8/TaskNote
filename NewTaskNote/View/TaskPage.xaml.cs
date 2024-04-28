@@ -1,3 +1,6 @@
+using Acr.UserDialogs;
+using Plugin.LocalNotification;
+
 namespace NewTaskNote;
 
 public partial class TaskPage : ContentPage
@@ -14,8 +17,9 @@ public partial class TaskPage : ContentPage
         
         currentTask = instanse.Data.CurrentTask;
         editedTask = instanse.Data.EditedTask;
-
+        
         SetFavorite();
+        SetDate();
 
         this.BindingContext = editedTask;
         StagesList.ItemsSource = editedTask.AllStages;
@@ -76,4 +80,65 @@ public partial class TaskPage : ContentPage
         editedTask.IsFavorite = !editedTask.IsFavorite;
         SetFavorite();
     }
+
+    private void AlarmedButton_Clicked(object sender, EventArgs e)
+    {
+        if (editedTask.IsAlarmed == false)
+        {
+            ShowDatePicker();
+        }
+        else
+        {
+            editedTask.IsAlarmed = false;
+            SetDate();
+        }
+    }
+
+    private void ShowDatePicker()
+    {
+        UserDialogs.Instance.DatePrompt(new DatePromptConfig 
+        {
+            MinimumDate= DateTime.Now,
+            OnAction = (result) => SetDate(result),
+            IsCancellable = true }
+        );
+    }
+
+    private void SetDate()
+    {
+        AlarmedButton.Text = editedTask.IsAlarmed ? "Убрать напоминание" : "Добавить напоминание";
+        AlarmedText.Text = editedTask.IsAlarmed ? editedTask.AlarmDate.ToString("dd.MM.yy") : "";
+    }
+
+    private void SetDate(DatePromptResult result)
+    {
+        if (result.Ok)
+        {
+            editedTask.AlarmDate = result.SelectedDate;
+            editedTask.IsAlarmed = true;
+            //AlarmedText.Text = editedTask.AlarmDate.ToString("dd:mm:yy");
+            SetDate();
+
+            var request = new NotificationRequest
+            {
+                NotificationId = 1337,
+                Title = "Сегодня крайний срок задачи",
+                Subtitle = "Напоминание",
+                Description = editedTask.TaskHeader,
+                BadgeNumber = 1,
+
+                Schedule = new NotificationRequestSchedule
+                {
+                    NotifyTime = GetDateFromTask().AddSeconds(5)
+                }
+            };
+            LocalNotificationCenter.Current.Show(request);
+        }
+    }
+
+    private DateTime GetDateFromTask()
+    {
+        return
+            editedTask.AlarmDate.AddHours(DateTime.Now.Hour).AddMinutes(DateTime.Now.Minute).AddSeconds(DateTime.Now.Second);
+    } 
 }

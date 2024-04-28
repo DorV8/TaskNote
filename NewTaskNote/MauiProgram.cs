@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
+using Acr.UserDialogs;
+using Microsoft.Maui.LifecycleEvents;
 
 namespace NewTaskNote
 {
@@ -13,13 +15,23 @@ namespace NewTaskNote
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-                });
+                })
 
-#if DEBUG
-    		builder.Logging.AddDebug();
+                .ConfigureLifecycleEvents(events =>
+                {
+#if ANDROID
+                events.AddAndroid(android => android.OnApplicationCreate(app => UserDialogs.Init(app)));
 #endif
-
+                });
+#if DEBUG
+            builder.Logging.AddDebug();
+#endif
             return builder.Build();
+
         }
     }
 }
+
+/*#if DEBUG
+builder.Logging.AddDebug();
+#endif*/

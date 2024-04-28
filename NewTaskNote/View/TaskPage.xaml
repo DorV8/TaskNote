@@ -4,7 +4,7 @@
              x:Class="NewTaskNote.TaskPage"
              Title="TaskPage">
     <Grid
-        RowDefinitions="Auto, Auto, Auto, Auto, *, Auto, Auto">
+        RowDefinitions="Auto, Auto, Auto, Auto, Auto, *, Auto, Auto">
         <Entry x:Name="HeaderEntry"
                Text="{Binding TaskHeader}"
                Grid.Row="0"
@@ -19,10 +19,22 @@
                 HorizontalOptions="Start"
                 Clicked="FavoriteButton_Clicked"
                 Margin="5,0,0,5"/>
+        <Grid Grid.Row="3"
+              ColumnDefinitions="Auto, *">
+            <Button x:Name="AlarmedButton"
+                    Grid.Column="0"
+                    HorizontalOptions="Start"
+                    Clicked="AlarmedButton_Clicked"
+                    Margin="5,0,0,5" />
+            <Label x:Name="AlarmedText"
+                   Grid.Column="1"
+                   VerticalOptions="Center"
+                   HorizontalOptions="End"/>
+        </Grid>
         <BoxView Color="Transparent"
                  HeightRequest="2"
-                 Grid.Row="3"/>
-        <ScrollView Grid.Row="4">
+                 Grid.Row="4"/>
+        <ScrollView Grid.Row="5">
             <ListView x:Name="StagesList">
                 <ListView.ItemTemplate>
                     <DataTemplate>
@@ -50,13 +62,13 @@
                 Clicked="AddStageButton_Clicked" 
                 HorizontalOptions="Center"
                 VerticalOptions="End"
-                Grid.Row="5"
+                Grid.Row="6"
                 Margin="10"/>
         <Button Text="Завершить задачу"
                 x:Name="FinishTask"
                 Clicked="FinishTask_Clicked"
                 VerticalOptions="End"
-                Grid.Row="6"
+                Grid.Row="7"
                 Margin="5"/>
     </Grid>
 </ContentPage>
