@@ -3,20 +3,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="NewTaskNote.TasksPage">
     <Grid RowDefinitions="Auto, *, Auto">
-        <Grid ColumnDefinitions="*, *"
-              Grid.Row="0"
-              BackgroundColor="LightGray">
-            <Label Text="Задачи"
-                   HorizontalOptions="Start"
-                   Grid.Column="0"
-                   VerticalOptions="Center"
-                   Margin="15,0,0,0"
-                   FontSize="Large" />
-            <Picker Title="сортировка"
-                    x:Name="MenuPicker"
-                    Grid.Column="1"
-                    HorizontalOptions="EndAndExpand" />
-        </Grid>
+        <Label Text="Задачи"
+               HorizontalOptions="Start"
+               Grid.Row="0"
+               VerticalOptions="Center"
+               Margin="15,0,0,0"
+               FontSize="Large" />
         <ScrollView Grid.Row="1">
             <ListView x:Name="TasksList"
                       BindingContext="AllTasks"
@@ -25,7 +17,8 @@
                     <DataTemplate>
                         <ViewCell>
                             <Grid RowDefinitions="Auto, Auto"
-                                  ColumnDefinitions="*, Auto">
+                                  ColumnDefinitions="*, Auto"
+                                  BackgroundColor="{Binding Color}">
                                 <Label Text="{Binding TaskHeader}"
                                            TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"
                                            Grid.Row="0"

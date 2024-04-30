@@ -6,6 +6,8 @@ namespace NewTaskNote
     [Application]
     public class MainApplication : MauiApplication
     {
+
+        public static readonly string ChannelId = "notificationServiceChannel";
         public MainApplication(IntPtr handle, JniHandleOwnership ownership)
             : base(handle, ownership)
         {

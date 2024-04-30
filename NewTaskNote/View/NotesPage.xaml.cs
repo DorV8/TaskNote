@@ -32,14 +32,15 @@ public partial class NotesPage : ContentPage
     }
     private void UpdateSortOptions()
     {
-        List<string> categorys = new List<string>()
+        List<string> result = [];
+
+        foreach (var item in Enum.GetValues(typeof(CategoryNote.CategoryNoteID)))
         {
-            "Белая","Зелёная","Жёлтая", "Красная", "Синяя", "Избранное"
-        };
-        foreach (var category in categorys)
-        {
-            MenuPicker.Items.Add(category);
+            var category = new CategoryNote() { ID = (CategoryNote.CategoryNoteID)item };
+            result.Add(category.NameColor);
         }
+
+        MenuPicker.ItemsSource = result;
     }
 
     private async void NotesList_ItemSelected(object sender, SelectedItemChangedEventArgs e)
@@ -76,7 +77,16 @@ public partial class NotesPage : ContentPage
     }
     private void SortNotes()
     {
-        instanse.Data.SortNotes(MenuPicker.SelectedIndex, SearchEntry.Text);
+        var ID = CategoryNote.CategoryNoteID.Undefined;
+        if (MenuPicker.SelectedIndex == MenuPicker.Items.Count - 1)
+        {
+            ID = CategoryNote.CategoryNoteID.Undefined;
+        }
+        else
+        {
+            ID = (CategoryNote.CategoryNoteID)MenuPicker.SelectedIndex;
+        }
+        instanse.Data.SortNotes(ID, SearchEntry.Text);
         NotesList.ItemsSource = instanse.Data.SelectedNotes;
     }
 }

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace NewTaskNote
 {
     public class ModelManager
@@ -52,7 +47,8 @@ namespace NewTaskNote
                 result.Add(new TaskItem()
                 {
                     TaskHeader = String.Format("Название {0}", i),
-                    TaskDesc = String.Format("Описание задачи под номером {0}",i)
+                    TaskDesc = String.Format("Описание задачи под номером {0}",i),
+                    Category = new CategoryNote() { ID = CategoryNote.CategoryNoteID.Undefined}
                 }
                 );
             }
@@ -66,11 +62,11 @@ namespace NewTaskNote
 
             string longString = "Длинный предлинный текст который представляет из себя целый абзац и нужен для проверки.";
 
-            result.Add(new NoteItem(String.Format("Записка в группе [{0}]. Обычная строка", groupIndex), CategoryKind.White, false));
-            result.Add(new NoteItem(String.Format("Записка в группе [{0}]. Длинный текст", groupIndex), CategoryKind.White, false));
-            result.Add(new NoteItem(String.Format("Записка в группе [{0}]. Очень длинный текст. Зеленая категория {1}", groupIndex, longString), CategoryKind.Green, false));
-            result.Add(new NoteItem(String.Format("Записка в группе [{0}]. Избранное", groupIndex), CategoryKind.White, true));
-            result.Add(new NoteItem(String.Format("Записка в группе [{0}]. Красная категория", groupIndex), CategoryKind.Red, false));
+            result.Add(new NoteItem(String.Format("Записка в группе [{0}]. Обычная строка", groupIndex), new CategoryNote { ID = CategoryNote.CategoryNoteID.Red}, false));
+            result.Add(new NoteItem(String.Format("Записка в группе [{0}]. Длинный текст", groupIndex), new CategoryNote { ID = CategoryNote.CategoryNoteID.Red }, false));
+            result.Add(new NoteItem(String.Format("Записка в группе [{0}]. Очень длинный текст. Зеленая категория {1}", groupIndex, longString), new CategoryNote { ID = CategoryNote.CategoryNoteID.Green }, false));
+            result.Add(new NoteItem(String.Format("Записка в группе [{0}]. Избранное", groupIndex), new CategoryNote { ID = CategoryNote.CategoryNoteID.Blue }, true));
+            result.Add(new NoteItem(String.Format("Записка в группе [{0}]. Красная категория", groupIndex), new CategoryNote { ID = CategoryNote.CategoryNoteID.Red }, false));
 
             return result;
         }

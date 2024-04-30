@@ -40,33 +40,34 @@ namespace NewTaskNote
             AllNotes.Remove(item);
         }
 
-        public void SortNotes(int CategoryId, string TextPiece)
+        public void SortNotes(CategoryNote.CategoryNoteID ID, string TextPiece)
         {
             IEnumerable<NoteItem> filtered = null;
-            switch (CategoryId)
+            filtered = AllNotes.Where(note => note.Category.ID == ID);
+            /*switch (CategoryId)
             {
                 case -1:
                     filtered = AllNotes;
                     break;
                 case 0:
-                    filtered = AllNotes.Where(note => note.Category == CategoryKind.White);
+                    filtered = AllNotes.Where(note => note.Category == CategoryNote.CategoryNoteID.White);
                     break;
                 case 1:
-                    filtered = AllNotes.Where(note => note.Category == CategoryKind.Green);
+                    filtered = AllNotes.Where(note => note.Category == CategoryNote.CategoryNoteID.Green);
                     break;
                 case 2:
-                    filtered = AllNotes.Where(note => note.Category == CategoryKind.Yellow);
+                    filtered = AllNotes.Where(note => note.Category == CategoryNote.CategoryNoteID.Yellow);
                     break;
                 case 3:
-                    filtered = AllNotes.Where(note => note.Category == CategoryKind.Red);
+                    filtered = AllNotes.Where(note => note.Category == CategoryNote.CategoryNoteID.Red);
                     break;
                 case 4:
-                    filtered = AllNotes.Where(note => note.Category == CategoryKind.Blue);
+                    filtered = AllNotes.Where(note => note.Category == CategoryNote.CategoryNoteID.Blue);
                     break;
                 case 5:
                     filtered = AllNotes.Where(note => note.IsFavorite == true);
                     break;
-            }
+            }*/
             if (TextPiece != "")
             {
                 filtered = filtered.Where(note => note.NoteText.ToUpper().Contains(TextPiece.ToUpper()));

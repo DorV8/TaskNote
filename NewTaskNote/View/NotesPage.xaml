@@ -33,7 +33,7 @@
                     <DataTemplate>
                         <ViewCell>
                             <Grid RowDefinitions="Auto, Auto"
-                                  BackgroundColor="{Binding ColorCategory}">
+                                  BackgroundColor="{Binding Color}">
                                 <Label Text="{Binding NoteText}"
                                        TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
                             </Grid>

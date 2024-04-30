@@ -96,12 +96,14 @@ public partial class TaskPage : ContentPage
 
     private void ShowDatePicker()
     {
+    #if ANDROID
         UserDialogs.Instance.DatePrompt(new DatePromptConfig 
         {
             MinimumDate= DateTime.Now,
             OnAction = (result) => SetDate(result),
             IsCancellable = true }
         );
+    #endif
     }
 
     private void SetDate()

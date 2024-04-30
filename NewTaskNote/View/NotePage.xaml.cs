@@ -18,14 +18,15 @@ public partial class NotePage : ContentPage
 
     private void UpdateCategorys()
     {
-        List<string> categorys = new List<string>()
-    {
-        "Белая","Зелёная","Жёлтая", "Красная", "Синяя"
-    };
-        foreach (var category in categorys)
+        List<string> result = [];
+
+        foreach (var item in Enum.GetValues(typeof(CategoryNote.CategoryNoteID)))
         {
-            CategoryPicker.Items.Add(category);
+            var category = new CategoryNote() { ID = (CategoryNote.CategoryNoteID)item };
+            result.Add(category.NameColor);
         }
+
+        CategoryPicker.ItemsSource = result;
     }
 
     public NotePage(NoteItem note)
@@ -37,7 +38,14 @@ public partial class NotePage : ContentPage
         UpdateCategorys();
 
         this.BindingContext = instanse.Data.EditedNote;
-        CategoryPicker.SelectedIndex = instanse.Data.EditedNote.CategoryId;
+        if (instanse.Data.EditedNote.Category.ID == CategoryNote.CategoryNoteID.Undefined)
+        {
+            CategoryPicker.SelectedIndex = CategoryPicker.Items.Count - 1;
+        }
+        else
+        {
+            CategoryPicker.SelectedIndex = (int)instanse.Data.EditedNote.Category.ID;
+        };
     }
 
     private void SaveButton_Clicked(object sender, EventArgs e)
@@ -76,23 +84,24 @@ public partial class NotePage : ContentPage
 
     private void CategoryPicker_SelectedIndexChanged(object sender, EventArgs e)
     {
-        switch (CategoryPicker.SelectedIndex)
+
+        /*switch (CategoryPicker.SelectedIndex)
         {
             case 0:
-                instanse.Data.EditedNote.Category = CategoryKind.White;
+                instanse.Data.EditedNote.Category = new CategoryNote() { ID = CategoryNote.CategoryNoteID.White };
                 break;
             case 1:
-                instanse.Data.EditedNote.Category = CategoryKind.Green;
+                instanse.Data.EditedNote.Category = CategoryNote.CategoryNoteID.Green;
                 break;
             case 2:
-                instanse.Data.EditedNote.Category = CategoryKind.Yellow;
+                instanse.Data.EditedNote.Category = CategoryNote.CategoryNoteID.Yellow;
                 break;
             case 3:
-                instanse.Data.EditedNote.Category = CategoryKind.Red;
+                instanse.Data.EditedNote.Category = CategoryNote.CategoryNoteID.Red;
                 break;
             case 4:
-                instanse.Data.EditedNote.Category = CategoryKind.Blue;
+                instanse.Data.EditedNote.Category = CategoryNote.CategoryNoteID.Blue;
                 break;
-        }
+        }*/
     }
 }
