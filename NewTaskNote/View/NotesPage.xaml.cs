@@ -9,12 +9,15 @@ public partial class NotesPage : ContentPage
 		InitializeComponent();
 		//Shell.FlyoutContentProperty = ;
 
-		NotesList.BindingContext = instanse.Data;
-		NotesList.ItemsSource = instanse.Data.AllNotes;
-
         UpdateSortOptions();
 
 	}
+    private void ContentPage_Appearing(object sender, EventArgs e)
+    {
+        NotesList.BindingContext = instanse.Data;
+        NotesList.ItemsSource = instanse.Data.ReversedAllNotes;
+    }
+
     protected override bool OnBackButtonPressed()
     {
         if ((MenuPicker.SelectedIndex == -1) && (SearchEntry.Text == ""))
@@ -26,7 +29,7 @@ public partial class NotesPage : ContentPage
             MenuPicker.SelectedIndex = -1;
             MenuPicker.SelectedItem = null;
             SearchEntry.Text = "";
-            NotesList.ItemsSource = instanse.Data.AllNotes;
+            NotesList.ItemsSource = instanse.Data.ReversedAllNotes;
             return true;
         }
     }
@@ -72,7 +75,7 @@ public partial class NotesPage : ContentPage
         }
         else
         {
-            NotesList.ItemsSource = instanse.Data.AllNotes;
+            NotesList.ItemsSource = instanse.Data.ReversedAllNotes;
         }
     }
     private void SortNotes()
@@ -87,6 +90,6 @@ public partial class NotesPage : ContentPage
             ID = (CategoryNote.CategoryNoteID)MenuPicker.SelectedIndex;
         }
         instanse.Data.SortNotes(ID, SearchEntry.Text);
-        NotesList.ItemsSource = instanse.Data.SelectedNotes;
+        NotesList.ItemsSource = instanse.Data.ReversedSelectedNotes;
     }
 }

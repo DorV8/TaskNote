@@ -5,9 +5,32 @@ namespace NewTaskNote
 {
     public class ModelData
     {
+        private ObservableCollection<NoteItem> GetReverse(ObservableCollection<NoteItem> collection)
+        {
+            var result = new ObservableCollection<NoteItem>();
+
+            for (int i = collection.Count - 1; i >= 0; i--)
+            {
+                result.Add(collection[i]);
+            }
+
+            return result;
+        }
+
         public ObservableCollection<NoteItem> AllNotes { get; set; }
+        public ObservableCollection<NoteItem> ReversedAllNotes
+        {
+            get
+            {
+                return GetReverse(AllNotes);
+            }
+        }
 
         public ObservableCollection<NoteItem> SelectedNotes { get; set; }
+        public ObservableCollection<NoteItem> ReversedSelectedNotes
+        {
+            get { return GetReverse(SelectedNotes); }
+        }
 
         public NoteItem CurrentNote { get; set; }
         public NoteItem EditedNote { get; set; }
@@ -44,30 +67,7 @@ namespace NewTaskNote
         {
             IEnumerable<NoteItem> filtered = null;
             filtered = AllNotes.Where(note => note.Category.ID == ID);
-            /*switch (CategoryId)
-            {
-                case -1:
-                    filtered = AllNotes;
-                    break;
-                case 0:
-                    filtered = AllNotes.Where(note => note.Category == CategoryNote.CategoryNoteID.White);
-                    break;
-                case 1:
-                    filtered = AllNotes.Where(note => note.Category == CategoryNote.CategoryNoteID.Green);
-                    break;
-                case 2:
-                    filtered = AllNotes.Where(note => note.Category == CategoryNote.CategoryNoteID.Yellow);
-                    break;
-                case 3:
-                    filtered = AllNotes.Where(note => note.Category == CategoryNote.CategoryNoteID.Red);
-                    break;
-                case 4:
-                    filtered = AllNotes.Where(note => note.Category == CategoryNote.CategoryNoteID.Blue);
-                    break;
-                case 5:
-                    filtered = AllNotes.Where(note => note.IsFavorite == true);
-                    break;
-            }*/
+             
             if (TextPiece != "")
             {
                 filtered = filtered.Where(note => note.NoteText.ToUpper().Contains(TextPiece.ToUpper()));

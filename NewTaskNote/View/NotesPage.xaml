@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="NewTaskNote.NotesPage"
+             Appearing="ContentPage_Appearing"
              >
     <Grid RowDefinitions="Auto, Auto, *, Auto">
         <Grid ColumnDefinitions="*, *"
@@ -27,7 +28,7 @@
                TextChanged="SearchEntry_TextChanged"/>
         <ScrollView Grid.Row="2">
             <ListView x:Name="NotesList"
-                      BindingContext="{Binding AllNotes}"
+                      BindingContext="{Binding ReversedAllNotes}"
                       ItemSelected="NotesList_ItemSelected">
                 <ListView.ItemTemplate>
                     <DataTemplate>

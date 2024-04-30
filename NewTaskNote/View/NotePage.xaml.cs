@@ -84,24 +84,20 @@ public partial class NotePage : ContentPage
 
     private void CategoryPicker_SelectedIndexChanged(object sender, EventArgs e)
     {
+        instanse.Data.EditedNote.Category = SelectCategory();
+    }
 
-        /*switch (CategoryPicker.SelectedIndex)
+    private CategoryNote SelectCategory()
+    {
+        var SelectedCategory = CategoryNote.CategoryNoteID.Undefined;
+        if (CategoryPicker.SelectedIndex == CategoryPicker.Items.Count - 1)
         {
-            case 0:
-                instanse.Data.EditedNote.Category = new CategoryNote() { ID = CategoryNote.CategoryNoteID.White };
-                break;
-            case 1:
-                instanse.Data.EditedNote.Category = CategoryNote.CategoryNoteID.Green;
-                break;
-            case 2:
-                instanse.Data.EditedNote.Category = CategoryNote.CategoryNoteID.Yellow;
-                break;
-            case 3:
-                instanse.Data.EditedNote.Category = CategoryNote.CategoryNoteID.Red;
-                break;
-            case 4:
-                instanse.Data.EditedNote.Category = CategoryNote.CategoryNoteID.Blue;
-                break;
-        }*/
+            SelectedCategory = CategoryNote.CategoryNoteID.Undefined;
+        }
+        else
+        {
+            SelectedCategory = (CategoryNote.CategoryNoteID)CategoryPicker.SelectedIndex;
+        }
+        return new CategoryNote() { ID = SelectedCategory };
     }
 }
