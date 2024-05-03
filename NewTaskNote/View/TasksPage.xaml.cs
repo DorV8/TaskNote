@@ -14,13 +14,17 @@ public partial class TasksPage : ContentPage
     private async void AddTaskButton_Clicked(object sender, EventArgs e)
     {
         var name = await DisplayPromptAsync("Создание задачи", "Введите название задачи:", "ОК", "Отмена");
-        if (name != null)
+        if ((name != "") && (name != null))
         {
             var desc = await DisplayPromptAsync("Создание задачи", "Введите описание задачи:", "ОК", "Отмена");
+            if (desc == null)
+            {
+            }
+            else
             instanse.Data.AddTask(new TaskItem()
             {
                 TaskHeader = name,
-                TaskDesc = desc,
+                TaskDesc = desc == "" ? "Нет описания" : desc,
                 IsFavorite = false,
                 IsAlarmed = false
             });

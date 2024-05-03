@@ -3,7 +3,7 @@ namespace NewTaskNote
 {
     public class ModelManager
     {
-        private static ModelManager singletoneInstanse = new ModelManager();
+        private static ModelManager singletoneInstanse = new();
 
         public static ModelManager GetInstanse()
         {
@@ -38,7 +38,7 @@ namespace NewTaskNote
             }
         }
 
-        public List<TaskItem> GetSampleTasks()
+        public static List<TaskItem> GetSampleTasks()
         {
             List<TaskItem> result = [];
 
@@ -47,8 +47,7 @@ namespace NewTaskNote
                 result.Add(new TaskItem()
                 {
                     TaskHeader = String.Format("Название {0}", i),
-                    TaskDesc = String.Format("Описание задачи под номером {0}",i),
-                    Category = new CategoryNote() { ID = CategoryNote.CategoryNoteID.Undefined}
+                    TaskDesc = String.Format("Описание задачи под номером {0}",i)
                 }
                 );
             }
@@ -56,9 +55,9 @@ namespace NewTaskNote
             return result;
         }
 
-        public List<NoteItem> GetSampleNotes(int groupIndex)
+        public static List<NoteItem> GetSampleNotes(int groupIndex)
         {
-            List<NoteItem> result = new List<NoteItem>();
+            List<NoteItem> result = [];
 
             string longString = "Длинный предлинный текст который представляет из себя целый абзац и нужен для проверки.";
 

@@ -26,8 +26,11 @@
                     HorizontalOptions="Start"
                     Clicked="AlarmedButton_Clicked"
                     Margin="5,0,0,5" />
-            <Label x:Name="AlarmedText"
+            <DatePicker x:Name="AlarmedDatePicker"
                    Grid.Column="1"
+                   IsVisible="{Binding IsAlarmed}"
+                   Date="{Binding AlarmDate}"
+                        
                    VerticalOptions="Center"
                    HorizontalOptions="End"/>
         </Grid>

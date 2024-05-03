@@ -1,4 +1,5 @@
 using Acr.UserDialogs;
+using Microsoft.Maui.Handlers;
 using Plugin.LocalNotification;
 
 namespace NewTaskNote;
@@ -23,6 +24,8 @@ public partial class TaskPage : ContentPage
 
         this.BindingContext = editedTask;
         StagesList.ItemsSource = editedTask.AllStages;
+
+        AlarmedDatePicker.IsVisible = false;
 
     }
 
@@ -86,6 +89,8 @@ public partial class TaskPage : ContentPage
         if (editedTask.IsAlarmed == false)
         {
             ShowDatePicker();
+            SetDate();
+
         }
         else
         {
@@ -96,27 +101,26 @@ public partial class TaskPage : ContentPage
 
     private void ShowDatePicker()
     {
-    #if ANDROID
-        UserDialogs.Instance.DatePrompt(new DatePromptConfig 
-        {
-            MinimumDate= DateTime.Now,
-            OnAction = (result) => SetDate(result),
-            IsCancellable = true }
-        );
-    #endif
+        AlarmedDatePicker.MinimumDate = DateTime.Now;
+        var handler = AlarmedDatePicker.Handler as IDatePickerHandler;
+#pragma warning disable CS8602 // Разыменование вероятной пустой ссылки.
+        handler.PlatformView.PerformClick();
+#pragma warning restore CS8602 // Разыменование вероятной пустой ссылки.
+        SetDate(true);
     }
 
     private void SetDate()
     {
         AlarmedButton.Text = editedTask.IsAlarmed ? "Убрать напоминание" : "Добавить напоминание";
-        AlarmedText.Text = editedTask.IsAlarmed ? editedTask.AlarmDate.ToString("dd.MM.yy") : "";
+        AlarmedDatePicker.Date = editedTask.IsAlarmed ? editedTask.AlarmDate : DateTime.MinValue;
+        AlarmedDatePicker.IsVisible = editedTask.IsAlarmed;
     }
 
-    private void SetDate(DatePromptResult result)
+    private void SetDate(bool res)
     {
-        if (result.Ok)
+        if (res)
         {
-            editedTask.AlarmDate = result.SelectedDate;
+            editedTask.AlarmDate = AlarmedDatePicker.Date;
             editedTask.IsAlarmed = true;
             //AlarmedText.Text = editedTask.AlarmDate.ToString("dd:mm:yy");
             SetDate();

@@ -89,7 +89,7 @@ public partial class NotePage : ContentPage
 
     private CategoryNote SelectCategory()
     {
-        var SelectedCategory = CategoryNote.CategoryNoteID.Undefined;
+        CategoryNote.CategoryNoteID SelectedCategory;
         if (CategoryPicker.SelectedIndex == CategoryPicker.Items.Count - 1)
         {
             SelectedCategory = CategoryNote.CategoryNoteID.Undefined;

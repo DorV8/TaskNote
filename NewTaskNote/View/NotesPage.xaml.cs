@@ -80,7 +80,7 @@ public partial class NotesPage : ContentPage
     }
     private void SortNotes()
     {
-        var ID = CategoryNote.CategoryNoteID.Undefined;
+        CategoryNote.CategoryNoteID ID;
         if (MenuPicker.SelectedIndex == MenuPicker.Items.Count - 1)
         {
             ID = CategoryNote.CategoryNoteID.Undefined;

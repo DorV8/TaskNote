@@ -27,7 +27,7 @@ namespace NewTaskNote
             set { SetProperty(ref _IsFavorite, value); }
         }
 
-        public CategoryNote Category = new CategoryNote() { ID = CategoryNote.CategoryNoteID.Undefined };
+        public CategoryNote Category = new() { ID = CategoryNote.CategoryNoteID.Undefined };
         public Color Color { get { return Category.Color; } }
 
         public NoteItem()

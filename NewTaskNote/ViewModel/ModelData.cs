@@ -5,7 +5,7 @@ namespace NewTaskNote
 {
     public class ModelData
     {
-        private ObservableCollection<NoteItem> GetReverse(ObservableCollection<NoteItem> collection)
+        private static ObservableCollection<NoteItem> GetReverse(ObservableCollection<NoteItem> collection)
         {
             var result = new ObservableCollection<NoteItem>();
 
@@ -47,8 +47,8 @@ namespace NewTaskNote
 
         public ModelData()
         {
-            AllNotes = new ObservableCollection<NoteItem>();
-            AllTasks = new ObservableCollection<TaskItem>();
+            AllNotes = [];
+            AllTasks = [];
         }
 
         //****************************************************

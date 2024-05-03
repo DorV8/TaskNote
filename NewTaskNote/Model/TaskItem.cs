@@ -15,9 +15,6 @@ namespace NewTaskNote
             get { return StageProgress == StageCount; }
         }
         public bool IsFavorite { get; set; }
-        public CategoryNote Category { get; set; }
-
-        public Color Color { get { return Category.Color; } }
 
         public ObservableCollection<TaskStageItem> AllStages { get; set; }
 
@@ -26,7 +23,6 @@ namespace NewTaskNote
         public int StageProgress 
         {
             get { return AllStages.Count(stage => stage.IsCompleted); }
-            set { StageProgress = value; }
         }
 
         public DateTime AlarmDate { get; set; }
@@ -37,7 +33,7 @@ namespace NewTaskNote
 
         public TaskItem()
         {
-            AllStages = new ObservableCollection<TaskStageItem>();
+            AllStages = [];
         }
 
         public void AddStage(TaskStageItem item)
