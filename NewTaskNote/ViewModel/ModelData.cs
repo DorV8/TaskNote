@@ -63,6 +63,12 @@ namespace NewTaskNote
             AllNotes.Remove(item);
         }
 
+        public void RewriteNote(NoteItem currentNote, NoteItem newNote)
+        {
+            var index = AllNotes.IndexOf(currentNote);
+            AllNotes[index] = newNote;
+        }
+
         public void SortNotes(CategoryNote.CategoryNoteID ID, string TextPiece)
         {
             IEnumerable<NoteItem> filtered = null;

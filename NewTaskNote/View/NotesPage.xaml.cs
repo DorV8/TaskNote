@@ -7,8 +7,6 @@ public partial class NotesPage : ContentPage
     public NotesPage()
 	{
 		InitializeComponent();
-		//Shell.FlyoutContentProperty = ;
-
         UpdateSortOptions();
 
 	}
@@ -36,13 +34,12 @@ public partial class NotesPage : ContentPage
     private void UpdateSortOptions()
     {
         List<string> result = [];
-
+        CategoryNote category = new();
         foreach (var item in Enum.GetValues(typeof(CategoryNote.CategoryNoteID)))
         {
-            var category = new CategoryNote() { ID = (CategoryNote.CategoryNoteID)item };
+            category.ID = (CategoryNote.CategoryNoteID)item;
             result.Add(category.NameColor);
         }
-
         MenuPicker.ItemsSource = result;
     }
 
@@ -55,6 +52,7 @@ public partial class NotesPage : ContentPage
             instanse.Data.CurrentNote = null;
             await Navigation.PushModalAsync(new NotePage(note));
         }
+
     }
 
     private async void AddButton_Clicked(object sender, EventArgs e)
@@ -80,15 +78,9 @@ public partial class NotesPage : ContentPage
     }
     private void SortNotes()
     {
-        CategoryNote.CategoryNoteID ID;
-        if (MenuPicker.SelectedIndex == MenuPicker.Items.Count - 1)
-        {
-            ID = CategoryNote.CategoryNoteID.Undefined;
-        }
-        else
-        {
-            ID = (CategoryNote.CategoryNoteID)MenuPicker.SelectedIndex;
-        }
+        CategoryNote.CategoryNoteID ID = MenuPicker.SelectedIndex == MenuPicker.Items.Count - 1 ?
+                                         CategoryNote.CategoryNoteID.Undefined:
+                                         (CategoryNote.CategoryNoteID)MenuPicker.SelectedIndex;
         instanse.Data.SortNotes(ID, SearchEntry.Text);
         NotesList.ItemsSource = instanse.Data.ReversedSelectedNotes;
     }

@@ -6,7 +6,6 @@ public partial class TasksPage : ContentPage
     public TasksPage()
 	{
 		InitializeComponent();
-
 		this.BindingContext = instanse.Data;
 		TasksList.ItemsSource = instanse.Data.AllTasks;
 	}
@@ -17,17 +16,16 @@ public partial class TasksPage : ContentPage
         if ((name != "") && (name != null))
         {
             var desc = await DisplayPromptAsync("Создание задачи", "Введите описание задачи:", "ОК", "Отмена");
-            if (desc == null)
-            {
+            if (desc != null)
+            {   
+                instanse.Data.AddTask(new TaskItem()
+                {
+                    TaskHeader = name,
+                    TaskDesc = desc == "" ? "Нет описания" : desc,
+                    IsFavorite = false,
+                    IsAlarmed = false
+                });
             }
-            else
-            instanse.Data.AddTask(new TaskItem()
-            {
-                TaskHeader = name,
-                TaskDesc = desc == "" ? "Нет описания" : desc,
-                IsFavorite = false,
-                IsAlarmed = false
-            });
         }
     }
 
@@ -40,5 +38,4 @@ public partial class TasksPage : ContentPage
             await Navigation.PushModalAsync(new TaskPage());
         }
     }
-
 }

@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
-using Acr.UserDialogs;
 using Microsoft.Maui.LifecycleEvents;
+using Shiny;
 
 namespace NewTaskNote
 {
@@ -11,6 +11,7 @@ namespace NewTaskNote
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
+                .UseShiny()
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -20,7 +21,7 @@ namespace NewTaskNote
                 .ConfigureLifecycleEvents(events =>
                 {
 #if ANDROID
-                    events.AddAndroid(android => android.OnApplicationCreate(app => UserDialogs.Init(app)));
+                    //events.AddAndroid(android => android.OnApplicationCreate(app => UserDialogs.Init(app)));
 #endif
                 });
 #if DEBUG

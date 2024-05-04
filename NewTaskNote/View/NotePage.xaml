@@ -2,7 +2,8 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="NewTaskNote.NotePage"
-             Title="NotePage">
+             Title="NotePage"
+             Appearing="ContentPage_Appearing">
     <Grid RowDefinitions="*, Auto">
         <Grid Grid.Row="0"
               RowDefinitions="250, Auto, Auto">

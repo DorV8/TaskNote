@@ -13,7 +13,6 @@ public partial class TaskPage : ContentPage
     public TaskPage()
 	{
 		InitializeComponent();
-
         instanse.Data.EditedTask = instanse.Data.CurrentTask;
         
         currentTask = instanse.Data.CurrentTask;
@@ -49,7 +48,6 @@ public partial class TaskPage : ContentPage
     protected override bool OnBackButtonPressed()
     {
         SetCurrentTask();
-
         Navigation.PopModalAsync();
         return true;
     }
@@ -59,10 +57,7 @@ public partial class TaskPage : ContentPage
         var answer = await DisplayAlert("Завершение", "Хотите завершить задачу?", "Да", "Нет");
         if (answer == true)
         {
-            foreach (var stage in editedTask.AllStages)
-            {
-                stage.IsCompleted = true;
-            }
+            foreach (var stage in editedTask.AllStages) { stage.IsCompleted = true; }
             SetCurrentTask();
             Navigation.PopModalAsync();
         }
@@ -89,24 +84,22 @@ public partial class TaskPage : ContentPage
         if (editedTask.IsAlarmed == false)
         {
             ShowDatePicker();
-            SetDate();
-
         }
         else
         {
             editedTask.IsAlarmed = false;
-            SetDate();
         }
+        SetDate();
     }
 
     private void ShowDatePicker()
     {
+    #if ANDROID
         AlarmedDatePicker.MinimumDate = DateTime.Now;
         var handler = AlarmedDatePicker.Handler as IDatePickerHandler;
-#pragma warning disable CS8602 // Разыменование вероятной пустой ссылки.
         handler.PlatformView.PerformClick();
-#pragma warning restore CS8602 // Разыменование вероятной пустой ссылки.
-        SetDate(true);
+        SetNotification();
+    #endif
     }
 
     private void SetDate()
@@ -116,35 +109,32 @@ public partial class TaskPage : ContentPage
         AlarmedDatePicker.IsVisible = editedTask.IsAlarmed;
     }
 
-    private void SetDate(bool res)
+    private void SetNotification()
     {
-        if (res)
+        editedTask.AlarmDate = AlarmedDatePicker.Date;
+        editedTask.IsAlarmed = true;
+        SetDate();
+        var request = new NotificationRequest
         {
-            editedTask.AlarmDate = AlarmedDatePicker.Date;
-            editedTask.IsAlarmed = true;
-            //AlarmedText.Text = editedTask.AlarmDate.ToString("dd:mm:yy");
-            SetDate();
+            NotificationId = 1337,
+            Title = "Сегодня крайний срок задачи",
+            Subtitle = "Напоминание",
+            Description = editedTask.TaskHeader,
+            BadgeNumber = 1,
 
-            var request = new NotificationRequest
+            Schedule = new NotificationRequestSchedule
             {
-                NotificationId = 1337,
-                Title = "Сегодня крайний срок задачи",
-                Subtitle = "Напоминание",
-                Description = editedTask.TaskHeader,
-                BadgeNumber = 1,
-
-                Schedule = new NotificationRequestSchedule
-                {
-                    NotifyTime = GetDateFromTask().AddSeconds(5)
-                }
-            };
-            LocalNotificationCenter.Current.Show(request);
-        }
+                NotifyTime = GetDateFromTask().AddSeconds(5)
+            }
+        };
+        LocalNotificationCenter.Current.Show(request);
     }
 
     private DateTime GetDateFromTask()
     {
         return
-            editedTask.AlarmDate.AddHours(DateTime.Now.Hour).AddMinutes(DateTime.Now.Minute).AddSeconds(DateTime.Now.Second);
+            editedTask.AlarmDate.AddHours(DateTime.Now.Hour)
+                                .AddMinutes(DateTime.Now.Minute)
+                                .AddSeconds(DateTime.Now.Second);
     } 
 }
