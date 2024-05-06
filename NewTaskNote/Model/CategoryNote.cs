@@ -1,59 +1,75 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+using System.Xml.Linq;
 
 namespace NewTaskNote
 {
     public class CategoryNote
     {
-        public enum CategoryNoteID { Undefined = -1, Red, Green, Blue}
+        private DatabaseContext database = new();
+        public enum CategoryNoteID { Work = 1, Study = 2, Home = 3, Purchases = 4, Plans = 5, NoCategory = 6 }
 
         public CategoryNoteID ID { get; set; }
-        public string NameColor
+        public string NameCategory
         {
             get
             {
-                var color = "";
+                string result = database.GetCategoryNameById(((int)ID));
+                return result;
+                /*var Name = "";
                 switch (ID)
                 {
                     case CategoryNoteID.Undefined:
-                        color = "Нет цвета";
+                        Name = "Нет категории";
                         break;
-                    case CategoryNoteID.Red:
-                        color = "Красный";
+                    case CategoryNoteID.Work:
+                        Name = "Работа";
                         break;
-                    case CategoryNoteID.Green:
-                        color = "Зелёный";
+                    case CategoryNoteID.Study:
+                        Name = "Учёба";
                         break;
-                    case CategoryNoteID.Blue:
-                        color = "Синий";
+                    case CategoryNoteID.Home:
+                        Name = "Домашние дела";
+                        break;
+                    case CategoryNoteID.Purchases:
+                        Name = "Покупки";
+                        break;
+                    case CategoryNoteID.Plans:
+                        Name = "Планы";
                         break;
                 }
-                return color;
+                return Name;*/
             }
         }
-
         public Color Color
         {
             get
             {
-                var result = Color.FromRgb(255, 255, 255);
+                var result = database.GetCategoryColorById((int)ID);
+                return result;
+                
+            }/*var result = Color.FromRgb(255, 255, 255);
                 switch (ID)
                 {
-                    case CategoryNoteID.Red:
-                        result = Color.FromRgb(255, 0, 0);
+                    case CategoryNoteID.Undefined:
+                        result = Color.;
                         break;
-                    case CategoryNoteID.Green:
-                        result = Color.FromRgb(0, 255, 0);
+                    case CategoryNoteID.Work:
+                        result = "Работа";
                         break;
-                    case CategoryNoteID.Blue:
-                        result = Color.FromRgb(0, 0, 255);
+                    case CategoryNoteID.Study:
+                        result = "Учёба";
+                        break;
+                    case CategoryNoteID.Home:
+                        result = "Домашние дела";
+                        break;
+                    case CategoryNoteID.Purchases:
+                        result = "Покупки";
+                        break;
+                    case CategoryNoteID.Plans:
+                        result = "Планы";
                         break;
                 }
-                return result;
-            }
+                return result;*/
 
         }
     }

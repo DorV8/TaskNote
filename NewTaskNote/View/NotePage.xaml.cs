@@ -14,6 +14,7 @@ public partial class NotePage : ContentPage
         CategoryPicker.ItemsSource = GetCategorys();
         instanse.Data.EditedNote = new NoteItem();
         DeleteButton.IsVisible = false;
+        CategoryPicker.SelectedIndex = CategoryPicker.Items.Count() - 1;
 	}
     public NotePage(NoteItem note)
     {
@@ -22,9 +23,9 @@ public partial class NotePage : ContentPage
         instanse.Data.CurrentNote = note;
         instanse.Data.EditedNote = note;
         editedNote = instanse.Data.EditedNote;
-        CategoryPicker.SelectedIndex = instanse.Data.EditedNote.Category.ID == CategoryNote.CategoryNoteID.Undefined ?
-                                       CategoryPicker.Items.Count - 1 :
-                                       (int)instanse.Data.EditedNote.Category.ID;
+        CategoryPicker.SelectedIndex = /*instanse.Data.EditedNote.Category.ID == CategoryNote.CategoryNoteID.Undefined ?
+                                       CategoryPicker.Items.Count - 1 :*/
+                                       (int)instanse.Data.EditedNote.Category.ID-1;
     }
 
     private void ContentPage_Appearing(object sender, EventArgs e)
@@ -41,7 +42,7 @@ public partial class NotePage : ContentPage
         foreach (var item in Enum.GetValues(typeof(CategoryNote.CategoryNoteID)))
         {
             category.ID = (CategoryNote.CategoryNoteID)item;
-            result.Add(category.NameColor);
+            result.Add(category.NameCategory);
         }
         return result;
     }
@@ -88,9 +89,9 @@ public partial class NotePage : ContentPage
 
     private CategoryNote SelectCategory()
     {
-        var SelectedCategory = CategoryPicker.SelectedIndex == CategoryPicker.Items.Count - 1 ?
-                               CategoryNote.CategoryNoteID.Undefined:
-                               (CategoryNote.CategoryNoteID)CategoryPicker.SelectedIndex;
+        var SelectedCategory = /*CategoryPicker.SelectedIndex == CategoryPicker.Items.Count - 1 ?
+                               CategoryNote.CategoryNoteID.Undefined:*/
+                               (CategoryNote.CategoryNoteID)CategoryPicker.SelectedIndex+1;
         return new CategoryNote() { ID = SelectedCategory };
     }
 }

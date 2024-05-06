@@ -4,6 +4,12 @@ namespace NewTaskNote
 {
     public class NoteItem: BindableBase
     {
+        private int _id;
+        public int id
+        {
+            get { return _id; }
+            set { SetProperty(ref _id, value); }
+        }
         private string _NoteText = "";
         public string NoteText
         {
@@ -27,7 +33,7 @@ namespace NewTaskNote
             set { SetProperty(ref _IsFavorite, value); }
         }
 
-        public CategoryNote Category = new() { ID = CategoryNote.CategoryNoteID.Undefined };
+        public CategoryNote Category = new() { ID = CategoryNote.CategoryNoteID.NoCategory };
         public Color Color { get { return Category.Color; } }
 
         public NoteItem()

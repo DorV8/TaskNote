@@ -9,11 +9,12 @@ public partial class NotesPage : ContentPage
 		InitializeComponent();
         UpdateSortOptions();
 
-	}
+    }
     private void ContentPage_Appearing(object sender, EventArgs e)
     {
         NotesList.BindingContext = instanse.Data;
         NotesList.ItemsSource = instanse.Data.ReversedAllNotes;
+
     }
 
     protected override bool OnBackButtonPressed()
@@ -38,7 +39,7 @@ public partial class NotesPage : ContentPage
         foreach (var item in Enum.GetValues(typeof(CategoryNote.CategoryNoteID)))
         {
             category.ID = (CategoryNote.CategoryNoteID)item;
-            result.Add(category.NameColor);
+            result.Add(category.NameCategory);
         }
         MenuPicker.ItemsSource = result;
     }
@@ -78,9 +79,9 @@ public partial class NotesPage : ContentPage
     }
     private void SortNotes()
     {
-        CategoryNote.CategoryNoteID ID = MenuPicker.SelectedIndex == MenuPicker.Items.Count - 1 ?
-                                         CategoryNote.CategoryNoteID.Undefined:
-                                         (CategoryNote.CategoryNoteID)MenuPicker.SelectedIndex;
+        CategoryNote.CategoryNoteID ID = /*MenuPicker.SelectedIndex == MenuPicker.Items.Count - 1 ?
+                                         CategoryNote.CategoryNoteID.Undefined:*/
+                                         (CategoryNote.CategoryNoteID)MenuPicker.SelectedIndex+1;
         instanse.Data.SortNotes(ID, SearchEntry.Text);
         NotesList.ItemsSource = instanse.Data.ReversedSelectedNotes;
     }

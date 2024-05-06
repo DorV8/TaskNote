@@ -132,8 +132,7 @@ public partial class TaskPage : ContentPage
 
     private DateTime GetDateFromTask()
     {
-        return
-            editedTask.AlarmDate.AddHours(DateTime.Now.Hour)
+        return editedTask.AlarmDate.AddHours(DateTime.Now.Hour)
                                 .AddMinutes(DateTime.Now.Minute)
                                 .AddSeconds(DateTime.Now.Second);
     } 

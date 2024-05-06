@@ -5,6 +5,8 @@ namespace NewTaskNote
 {
     public class ModelData
     {
+        public DatabaseContext database;
+
         private static ObservableCollection<NoteItem> GetReverse(ObservableCollection<NoteItem> collection)
         {
             var result = new ObservableCollection<NoteItem>();
@@ -49,6 +51,7 @@ namespace NewTaskNote
         {
             AllNotes = [];
             AllTasks = [];
+            database = new();
         }
 
         //****************************************************
