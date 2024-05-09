@@ -8,12 +8,10 @@
         <Entry x:Name="HeaderEntry"
                Text="{Binding TaskHeader}"
                Grid.Row="0"
-               IsReadOnly="True"
                />
         <Entry x:Name="DescEntry"
                Text="{Binding TaskDesc}"
-               Grid.Row="1"
-               IsReadOnly="True" />
+               Grid.Row="1"/>
         <Button x:Name="FavoriteButton"
                 Grid.Row="2"
                 HorizontalOptions="Start"
@@ -72,6 +70,6 @@
                 Clicked="FinishTask_Clicked"
                 VerticalOptions="End"
                 Grid.Row="7"
-                Margin="5"/>
+                Margin="5" />
     </Grid>
 </ContentPage>

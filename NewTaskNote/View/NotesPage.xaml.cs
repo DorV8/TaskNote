@@ -7,7 +7,7 @@ public partial class NotesPage : ContentPage
     public NotesPage()
 	{
 		InitializeComponent();
-        UpdateSortOptions();
+        GetSortOptions();
 
     }
     private void ContentPage_Appearing(object sender, EventArgs e)
@@ -16,7 +16,15 @@ public partial class NotesPage : ContentPage
         NotesList.ItemsSource = instanse.Data.ReversedAllNotes;
 
     }
-
+    private void GetSortOptions()
+    {
+        var result = new List<string>();
+        foreach(var item in instanse.Data.categorys)
+        {
+            result.Add(item.NameCategory);
+        }
+        MenuPicker.ItemsSource = result;
+    }
     protected override bool OnBackButtonPressed()
     {
         if ((MenuPicker.SelectedIndex == -1) && (SearchEntry.Text == ""))
@@ -32,33 +40,38 @@ public partial class NotesPage : ContentPage
             return true;
         }
     }
-    private void UpdateSortOptions()
-    {
-        List<string> result = [];
-        CategoryNote category = new();
-        foreach (var item in Enum.GetValues(typeof(CategoryNote.CategoryNoteID)))
-        {
-            category.ID = (CategoryNote.CategoryNoteID)item;
-            result.Add(category.NameCategory);
-        }
-        MenuPicker.ItemsSource = result;
-    }
-
     private async void NotesList_ItemSelected(object sender, SelectedItemChangedEventArgs e)
     {
         if (e.SelectedItem != null)
         {
-            var note = NotesList.SelectedItem as NoteItem;
-            NotesList.SelectedItem = null;
-            instanse.Data.CurrentNote = null;
-            await Navigation.PushModalAsync(new NotePage(note));
+            try
+            {
+                var note = new NoteItem();
+                note = NotesList.SelectedItem as NoteItem;
+                NotesList.SelectedItem = null;
+                await Navigation.PushModalAsync(new NotePage(note));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
         }
 
     }
 
     private async void AddButton_Clicked(object sender, EventArgs e)
     {
-        await Navigation.PushModalAsync(new NotePage());
+        try
+        {
+            instanse.Data.CurrentNote = null;
+            instanse.Data.EditedNote = null;
+            await Navigation.PushModalAsync(new NotePage());
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("проверка добавления");
+            Console.WriteLine(ex.ToString());
+        }
     }
 
     private void MenuPicker_SelectedIndexChanged(object sender, EventArgs e)
@@ -79,9 +92,9 @@ public partial class NotesPage : ContentPage
     }
     private void SortNotes()
     {
-        CategoryNote.CategoryNoteID ID = /*MenuPicker.SelectedIndex == MenuPicker.Items.Count - 1 ?
+        int ID = /*MenuPicker.SelectedIndex == MenuPicker.Items.Count - 1 ?
                                          CategoryNote.CategoryNoteID.Undefined:*/
-                                         (CategoryNote.CategoryNoteID)MenuPicker.SelectedIndex+1;
+                                         MenuPicker.SelectedIndex +1;
         instanse.Data.SortNotes(ID, SearchEntry.Text);
         NotesList.ItemsSource = instanse.Data.ReversedSelectedNotes;
     }

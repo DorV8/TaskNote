@@ -1,9 +1,4 @@
 ﻿using Microsoft.Data.Sqlite;
-using Microsoft.Maui.Controls;
-using SQLite;
-using SQLitePCL;
-using System.Collections.ObjectModel;
-using System.Runtime.InteropServices;
 
 namespace NewTaskNote
 {
@@ -93,7 +88,8 @@ namespace NewTaskNote
                     "Id_note INTEGER PRIMARY KEY," +
                     "Note_text TEXT," +
                     "isFavorite BOOLEAN," +
-                    "id_category INTEGER" +
+                    "id_category INTEGER," +
+                    "ModDate DATE" +
                 ")";
             CreateTable(commandString);
             Console.WriteLine("Таблица заметок успешно создана");
@@ -113,7 +109,7 @@ namespace NewTaskNote
             using var clearCommand = new SqliteCommand("DELETE FROM Notes WHERE Id_note>0", connection);
             clearCommand.ExecuteNonQuery();
 
-            var commandString = "INSERT INTO Notes (Note_text, isFavorite, id_category) VALUES (@text, @fav, @id)";
+            var commandString = "INSERT INTO Notes (Note_text, isFavorite, id_category, ModDate) VALUES (@text, @fav, @id, @date)";
             Random rnd = new();
             using var command = new SqliteCommand(commandString, connection);
             for (int i = 0; i < 6; i++)
@@ -123,7 +119,8 @@ namespace NewTaskNote
                 {
                     new SqliteParameter("@text", "заметка " + i),
                     new SqliteParameter("@fav", true),
-                    new SqliteParameter("@id", rnd.Next(1,6))
+                    new SqliteParameter("@id", rnd.Next(1,6)),
+                    new SqliteParameter("@date", DateTime.Now)
                 });
                 command.ExecuteNonQuery();
             }
@@ -141,11 +138,24 @@ namespace NewTaskNote
             var reader = command.ExecuteReader();
             while (reader.Read())
             {
-                NoteItem note = new();
-                note.id = reader.GetInt32(0);
+                NoteItem note = new() 
+                {
+                    id = reader.GetInt32(0),
+                    NoteText = reader.GetString(1),
+                    IsFavorite = reader.GetBoolean(2),
+                    Category = new CategoryNote()
+                    {
+                        ID = reader.GetInt32(3),
+                        NameCategory = GetCategoryNameById(reader.GetInt32(3)),
+                        Color = GetCategoryColorById(reader.GetInt32(3))
+                    }
+                };
+                /*note.id = reader.GetInt32(0);
                 note.NoteText = reader.GetString(1);
                 note.IsFavorite = reader.GetBoolean(2);
-                note.Category = new CategoryNote() { ID = (CategoryNote.CategoryNoteID)reader.GetInt32(3) };
+                note.Category = new CategoryNote() { ID = reader.GetInt32(3) };
+                note.Category.NameCategory = GetCategoryNameById(note.Category.ID);
+                note.Category.Color = GetCategoryColorById(note.Category.ID);*/
                 result.Add(note);
             }
             connection.Close();
@@ -182,6 +192,57 @@ namespace NewTaskNote
             {
                 result = reader.GetString(0);
                 Console.WriteLine("id = " + reader.GetInt64(1).ToString());
+            }
+            return result;
+        }
+
+        public void AddNote(NoteItem item)
+        {
+            using var connection = new SqliteConnection($"Data Source={DbPath}");
+            connection.Open();
+
+            var commandString = "INSERT INTO Notes (Note_text, isFavorite, id_category, ModDate) " +
+                                "VALUES (@text, @fav, @id_category, @modDate)";
+            using var command = new SqliteCommand(commandString, connection);
+            command.Parameters.AddRange(new[]
+            {
+                new SqliteParameter("@text", item.NoteText),
+                new SqliteParameter("@fav", item.IsFavorite),
+                new SqliteParameter("@id_category", (int)item.Category.ID),
+                new SqliteParameter("@modDate", item.ModDate)
+            });
+        }
+        public void DeleteNote(NoteItem item)
+        {
+            using var connection = new SqliteConnection($"Data Source={DbPath}");
+            connection.Open();
+
+            var commandString = "DELETE FROM Notes WHERE Id_note = @id";
+            using var command = new SqliteCommand(commandString, connection);
+            command.Parameters.AddWithValue("@id", item.id);
+
+            command.ExecuteNonQuery();
+            connection.Close();
+        }
+
+        public List<CategoryNote> GetCategorys()
+        {
+            var result = new List<CategoryNote>();
+            using var connection = new SqliteConnection($"Data Source={DbPath}");
+            connection.Open();
+
+            var commandString = "SELECT * FROM Categorys";
+            using var command = new SqliteCommand(commandString, connection);
+            var reader = command.ExecuteReader();
+
+            while (reader.Read())
+            {
+                CategoryNote cat = new();
+                cat.ID = reader.GetInt32(0);
+                cat.NameCategory = reader.GetString(1);
+                cat.Color = Color.FromArgb(reader.GetString(2));
+
+                result.Add(cat);
             }
             return result;
         }

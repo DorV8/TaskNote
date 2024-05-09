@@ -6,7 +6,7 @@ namespace NewTaskNote
     public class ModelData
     {
         public DatabaseContext database;
-
+        public List<CategoryNote> categorys { get; private set; }
         private static ObservableCollection<NoteItem> GetReverse(ObservableCollection<NoteItem> collection)
         {
             var result = new ObservableCollection<NoteItem>();
@@ -18,7 +18,10 @@ namespace NewTaskNote
 
             return result;
         }
-
+        private void SetCategorys()
+        {
+            categorys = database.GetCategorys();
+        }
         public ObservableCollection<NoteItem> AllNotes { get; set; }
         public ObservableCollection<NoteItem> ReversedAllNotes
         {
@@ -49,9 +52,10 @@ namespace NewTaskNote
 
         public ModelData()
         {
-            AllNotes = [];
-            AllTasks = [];
             database = new();
+            AllNotes = [];
+            SetCategorys();
+            AllTasks = [];
         }
 
         //****************************************************
@@ -72,7 +76,7 @@ namespace NewTaskNote
             AllNotes[index] = newNote;
         }
 
-        public void SortNotes(CategoryNote.CategoryNoteID ID, string TextPiece)
+        public void SortNotes(int ID, string TextPiece)
         {
             IEnumerable<NoteItem> filtered = null;
             filtered = AllNotes.Where(note => note.Category.ID == ID);
@@ -94,6 +98,12 @@ namespace NewTaskNote
         public void RemoveTask(TaskItem item)
         {
             AllTasks.Remove(item);
+        }
+
+        public void RewriteTask(TaskItem oldItem, TaskItem newItem)
+        {
+            var index = AllTasks.IndexOf(oldItem);
+            AllTasks[index] = newItem;
         }
     }
 }

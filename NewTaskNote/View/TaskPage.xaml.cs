@@ -69,8 +69,7 @@ public partial class TaskPage : ContentPage
     }
     private void SetCurrentTask()
     {
-        var index = instanse.Data.AllTasks.IndexOf(currentTask);
-        instanse.Data.AllTasks[index] = editedTask;
+        instanse.Data.RewriteTask(currentTask, editedTask);
     }
 
     private void FavoriteButton_Clicked(object sender, EventArgs e)
@@ -135,5 +134,5 @@ public partial class TaskPage : ContentPage
         return editedTask.AlarmDate.AddHours(DateTime.Now.Hour)
                                 .AddMinutes(DateTime.Now.Minute)
                                 .AddSeconds(DateTime.Now.Second);
-    } 
+    }
 }

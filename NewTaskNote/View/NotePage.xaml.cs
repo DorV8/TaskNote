@@ -11,40 +11,44 @@ public partial class NotePage : ContentPage
     public NotePage()
 	{
         InitializeComponent();
-        CategoryPicker.ItemsSource = GetCategorys();
+        GetCategoryOptions();
         instanse.Data.EditedNote = new NoteItem();
         DeleteButton.IsVisible = false;
-        CategoryPicker.SelectedIndex = CategoryPicker.Items.Count() - 1;
 	}
     public NotePage(NoteItem note)
     {
         InitializeComponent();
-        CategoryPicker.ItemsSource = GetCategorys();
+        GetCategoryOptions();
         instanse.Data.CurrentNote = note;
         instanse.Data.EditedNote = note;
         editedNote = instanse.Data.EditedNote;
-        CategoryPicker.SelectedIndex = /*instanse.Data.EditedNote.Category.ID == CategoryNote.CategoryNoteID.Undefined ?
-                                       CategoryPicker.Items.Count - 1 :*/
-                                       (int)instanse.Data.EditedNote.Category.ID-1;
     }
-
+    private void GetCategoryOptions()
+    {
+        var result = new List<string>();
+        foreach (var item in instanse.Data.categorys)
+        {
+            result.Add(item.NameCategory);
+        }
+        CategoryPicker.ItemsSource = result;
+    }
     private void ContentPage_Appearing(object sender, EventArgs e)
     {
         editedNote = instanse.Data.EditedNote;
-        currentNote = instanse.Data.CurrentNote; 
-        this.BindingContext = editedNote;
-    }
-
-    private List<string> GetCategorys()
-    {
-        List<string> result = [];
-        CategoryNote category = new();
-        foreach (var item in Enum.GetValues(typeof(CategoryNote.CategoryNoteID)))
+        currentNote = instanse.Data.CurrentNote;
+        CategoryPicker.SelectedIndex = editedNote.IsNullOrDefault() ?
+                                       CategoryPicker.SelectedIndex = CategoryPicker.Items.Count() - 1 :
+                                       (int)editedNote.Category.ID - 1;
+        /*try
         {
-            category.ID = (CategoryNote.CategoryNoteID)item;
-            result.Add(category.NameCategory);
+            if (editedNote.IsNullOrDefault()) { CategoryPicker.SelectedIndex = CategoryPicker.Items.Count() - 1; }
         }
-        return result;
+        catch (Exception ex)
+        {
+            Console.WriteLine("something messed up \n" + ex);
+        }
+        CategoryPicker.SelectedIndex = (int)editedNote.Category.ID - 1;*/
+        this.BindingContext = editedNote;
     }
 
     //*******************************************
@@ -59,6 +63,7 @@ public partial class NotePage : ContentPage
             }
             else
             {
+                editedNote.ModDate = DateTime.Now;
                 instanse.Data.RewriteNote(currentNote, editedNote);
             }
             Navigation.PopModalAsync();
@@ -72,6 +77,7 @@ public partial class NotePage : ContentPage
         if (answer == true)
         {
             instanse.Data.RemoveNote(currentNote);
+            instanse.Data.database.DeleteNote(currentNote);
             DisplayAlert("Удаление", "Заметка была успешно удалена", "ОК");
             Navigation.PopModalAsync();
         }
@@ -89,9 +95,12 @@ public partial class NotePage : ContentPage
 
     private CategoryNote SelectCategory()
     {
-        var SelectedCategory = /*CategoryPicker.SelectedIndex == CategoryPicker.Items.Count - 1 ?
-                               CategoryNote.CategoryNoteID.Undefined:*/
-                               (CategoryNote.CategoryNoteID)CategoryPicker.SelectedIndex+1;
-        return new CategoryNote() { ID = SelectedCategory };
+        var SelectedCategory = CategoryPicker.SelectedIndex+1;
+        return new CategoryNote() 
+        {
+            ID = SelectedCategory,
+            NameCategory = instanse.Data.database.GetCategoryNameById(SelectedCategory),
+            Color = instanse.Data.database.GetCategoryColorById(SelectedCategory)
+        };
     }
 }
