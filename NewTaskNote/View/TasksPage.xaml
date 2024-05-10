@@ -18,7 +18,7 @@
                         <ViewCell>
                             <Grid RowDefinitions="Auto, Auto"
                                   ColumnDefinitions="*, Auto"
-                                  BackgroundColor="{Binding Color}">
+                                  BackgroundColor="{Binding bgColor}">
                                 <Label Text="{Binding TaskHeader}"
                                            TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"
                                            Grid.Row="0"

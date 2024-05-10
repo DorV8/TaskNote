@@ -12,7 +12,15 @@ namespace NewTaskNote
 
         public bool IsFinished
         {
-            get { return StageProgress == StageCount; }
+            get { return StageCount == 0 ? false : StageProgress == StageCount; }
+        }
+
+        public Color bgColor
+        {
+            get
+            {
+                return IsFinished == false ? Color.FromArgb("#FFFFFF") : Color.FromArgb("#98FB98");
+            }
         }
         public bool IsFavorite { get; set; }
 
