@@ -5,6 +5,7 @@ namespace NewTaskNote
 {
     public class TaskItem: BindableBase
     {
+        public int id;
         public DateTime ModDate { get; set; }
 
         public string TaskHeader { get; set; }

@@ -46,7 +46,7 @@ public partial class TaskPage : ContentPage
             if (name != null)
             {
                 var desc = await DisplayPromptAsync("Создание задачи", "Введите описание задачи:", "ОК", "Отмена");
-                editedTask.AllStages.Add(new TaskStageItem()
+                editedTask.AddStage(new TaskStageItem()
                 {
                     TaskStageHeader = name,
                     TaskStageDesc = desc
@@ -174,7 +174,7 @@ public partial class TaskPage : ContentPage
         var answer = await DisplayAlert("Удаление", "Хотите удалить эту подзадачу?", "Да", "Нет");
         if (answer == true)
         {
-            instanse.Data.EditedTask.AllStages.Remove(item as TaskStageItem);
+            editedTask.RemoveStage(item as TaskStageItem);
         }
     }
 }

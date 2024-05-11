@@ -16,6 +16,9 @@ namespace NewTaskNote
             //File.Delete(DbPath);
             CreateCategorys();
             CreateNotes();
+
+            CreateTasks();
+            CreateStages();
         }
 
         private void CreateTable(string commandString)
@@ -166,6 +169,52 @@ namespace NewTaskNote
             connection.Close();
 
             return result;
+        }
+
+        //*******************************************************
+
+        public void CreateTasks()
+        {
+            var commandString = "CREATE TABLE IF NOT EXISTS Tasks " +
+                "(" +
+                    "Id INT PRIMARY KEY," +
+                    "ModDate DATE," +
+                    "Header TEXT," +
+                    "Desc TEXT," +
+                    "IsFavorite BOOL," +
+                    "AlarmDate DATE" +
+               ")";
+            CreateTable(commandString);
+        }
+
+        public void AddTask(TaskItem item)
+        {
+            //
+        }
+
+        public void RemoveTask(TaskItem item)
+        {
+
+        }
+
+        public void RewriteTask(TaskItem oldItem, TaskItem newItem)
+        {
+
+        }
+        //*******************************************************
+
+        public void CreateStages()
+        {
+            var commandString = "CREATE TABLE IF NOT EXISTS Stages" +
+                "(" +
+                    "Id INT PRIMARY KEY," +
+                    "Header TEXT," +
+                    "Desc TEXT," +
+                    "isFinished BOOL," +
+                    "id_task INT," +
+                    "FOREIGN KEY(id_task) REFERENCES Tasks(Id)" +
+                ")";
+            CreateTable(commandString);
         }
 
         //*******************************************************
