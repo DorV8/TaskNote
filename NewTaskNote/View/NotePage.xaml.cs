@@ -60,11 +60,13 @@ public partial class NotePage : ContentPage
             if (instanse.Data.CurrentNote.IsNullOrDefault())
             {
                 instanse.Data.AddNote(editedNote);
+                instanse.Data.database.AddNote(editedNote);
             }
             else
             {
                 editedNote.ModDate = DateTime.Now;
                 instanse.Data.RewriteNote(currentNote, editedNote);
+                instanse.Data.database.RewriteNote(currentNote, editedNote);
             }
             Navigation.PopModalAsync();
             instanse.Data.EditedNote = null;

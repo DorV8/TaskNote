@@ -43,4 +43,15 @@ public partial class TasksPage : ContentPage
     {
         TasksList.ItemsSource = instanse.Data.OrderedAllTasks;
     }
+
+    private async void DeleteTaskMenuItem_Clicked(object sender, EventArgs e)
+    {
+        var param = ((MenuItem)sender).CommandParameter;
+        var answer = await DisplayAlert("Удаление", "Хотите удалить эту задачу?", "Да", "Нет");
+        if (answer == true)
+        {
+            instanse.Data.RemoveTask(param as TaskItem);
+            //здесь будет удаление из БД
+        }
+    }
 }

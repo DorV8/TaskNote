@@ -21,9 +21,9 @@
                                   ColumnDefinitions="*, Auto"
                                   BackgroundColor="{Binding bgColor}">
                                 <Label Text="{Binding TaskHeader}"
-                                           TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"
-                                           Grid.Row="0"
-                                           Grid.Column="0" />
+                                       TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"
+                                       Grid.Row="0"
+                                       Grid.Column="0" />
                                 <Label Text="{Binding TaskDesc}"
                                        TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"
                                        Grid.Row="1"
@@ -41,6 +41,12 @@
                                     </Label.Text>
                                 </Label>
                             </Grid>
+                            <ViewCell.ContextActions>
+                                <MenuItem Text="Удалить"
+                                          x:Name="DeleteTaskMenuItem"
+                                          Clicked="DeleteTaskMenuItem_Clicked"
+                                          CommandParameter="{Binding .}"/>
+                            </ViewCell.ContextActions>
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>

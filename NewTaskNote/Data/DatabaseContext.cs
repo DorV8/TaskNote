@@ -11,6 +11,23 @@ namespace NewTaskNote
         {
             InitializeDatabase();
         }
+        private void InitializeDatabase()
+        {
+            //File.Delete(DbPath);
+            CreateCategorys();
+            CreateNotes();
+        }
+
+        private void CreateTable(string commandString)
+        {
+            using var connection = new SqliteConnection($"Data Source={DbPath}");
+            connection.Open();
+            using var command = new SqliteCommand(commandString, connection);
+            command.ExecuteNonQuery();
+            connection.Close();
+        }
+
+        //*******************************************************
         private void CreateCategorys()
         {
             var commandString =
@@ -72,14 +89,8 @@ namespace NewTaskNote
                 }
             }
         }
-        private void CreateTable(string commandString)
-        {
-            using var connection = new SqliteConnection($"Data Source={DbPath}");
-            connection.Open();
-            using var command = new SqliteCommand(commandString, connection);
-            command.ExecuteNonQuery();
-            connection.Close();
-        }
+
+        //*******************************************************
 
         private void CreateNotes()
         {
@@ -93,13 +104,6 @@ namespace NewTaskNote
                 ")";
             CreateTable(commandString);
             Console.WriteLine("Таблица заметок успешно создана");
-        }
-
-        private void InitializeDatabase()
-        {
-            //File.Delete(DbPath);
-            CreateCategorys();
-            CreateNotes();
         }
 
         public void InsertSamples()
@@ -163,6 +167,7 @@ namespace NewTaskNote
             return result;
         }
 
+        //*******************************************************
         public Color GetCategoryColorById(int id)
         {
             var result = new Color();
@@ -196,6 +201,29 @@ namespace NewTaskNote
             return result;
         }
 
+        public List<CategoryNote> GetCategorys()
+        {
+            var result = new List<CategoryNote>();
+            using var connection = new SqliteConnection($"Data Source={DbPath}");
+            connection.Open();
+
+            var commandString = "SELECT * FROM Categorys";
+            using var command = new SqliteCommand(commandString, connection);
+            var reader = command.ExecuteReader();
+
+            while (reader.Read())
+            {
+                CategoryNote cat = new();
+                cat.ID = reader.GetInt32(0);
+                cat.NameCategory = reader.GetString(1);
+                cat.Color = Color.FromArgb(reader.GetString(2));
+
+                result.Add(cat);
+            }
+            return result;
+        }
+
+        //*******************************************************
         public void AddNote(NoteItem item)
         {
             using var connection = new SqliteConnection($"Data Source={DbPath}");
@@ -225,26 +253,31 @@ namespace NewTaskNote
             connection.Close();
         }
 
-        public List<CategoryNote> GetCategorys()
+        public void RewriteNote(NoteItem oldItem, NoteItem newItem)
         {
-            var result = new List<CategoryNote>();
             using var connection = new SqliteConnection($"Data Source={DbPath}");
             connection.Open();
 
-            var commandString = "SELECT * FROM Categorys";
+            var commandString = "UPDATE Notes SET " +
+                "Note_text = @text," +
+                "isFavorite = @isF," +
+                "id_category = @idC," +
+                "ModDate = @date " +
+                "WHERE Id_note = @id";
+
             using var command = new SqliteCommand(commandString, connection);
-            var reader = command.ExecuteReader();
-
-            while (reader.Read())
+            command.Parameters.AddRange(new[]
             {
-                CategoryNote cat = new();
-                cat.ID = reader.GetInt32(0);
-                cat.NameCategory = reader.GetString(1);
-                cat.Color = Color.FromArgb(reader.GetString(2));
-
-                result.Add(cat);
-            }
-            return result;
+                new SqliteParameter("@text", newItem.NoteText),
+                new SqliteParameter("@isF", newItem.IsFavorite),
+                new SqliteParameter("@idC", newItem.Category.ID),
+                new SqliteParameter("@date", newItem.ModDate),
+                new SqliteParameter("@id", oldItem.id)
+            });
+            command.ExecuteNonQuery();
+            connection.Close();
         }
+
+        //*******************************************************
     }
 }
