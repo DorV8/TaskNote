@@ -100,7 +100,8 @@ namespace NewTaskNote
                     "Note_text TEXT," +
                     "isFavorite BOOLEAN," +
                     "id_category INTEGER," +
-                    "ModDate DATE" +
+                    "ModDate DATE," +
+                    "FOREIGN KEY (id_category) REFERENCES Categorys(Id)" +
                 ")";
             CreateTable(commandString);
             Console.WriteLine("Таблица заметок успешно создана");
