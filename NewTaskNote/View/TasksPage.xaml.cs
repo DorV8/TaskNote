@@ -7,7 +7,7 @@ public partial class TasksPage : ContentPage
 	{
 		InitializeComponent();
 		this.BindingContext = instanse.Data;
-		TasksList.ItemsSource = instanse.Data.AllTasks;
+		TasksList.ItemsSource = instanse.Data.OrderedAllTasks;
 	}
 
     private async void AddTaskButton_Clicked(object sender, EventArgs e)
@@ -37,5 +37,10 @@ public partial class TasksPage : ContentPage
             TasksList.SelectedItem = null;
             await Navigation.PushModalAsync(new TaskPage());
         }
+    }
+
+    private void ContentPage_Appearing(object sender, EventArgs e)
+    {
+        TasksList.ItemsSource = instanse.Data.OrderedAllTasks;
     }
 }

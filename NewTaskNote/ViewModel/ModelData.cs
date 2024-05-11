@@ -43,6 +43,14 @@ namespace NewTaskNote
         //****************************************************
 
         public ObservableCollection<TaskItem> AllTasks { get; set; }
+
+        public ObservableCollection<TaskItem> OrderedAllTasks
+        {
+            get
+            {
+                return new ObservableCollection<TaskItem>(AllTasks.OrderBy(c => c.IsFinished));
+            }
+        }
         
         public TaskItem CurrentTask { get; set; }
 
