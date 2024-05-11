@@ -41,18 +41,23 @@
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
-                            <Grid
-                                RowDefinitions="Auto, Auto"
-                                ColumnDefinitions="Auto, Auto">
+                            <Grid RowDefinitions="Auto, Auto"
+                                  ColumnDefinitions="Auto, *, Auto">
                                 <CheckBox IsChecked="{Binding IsCompleted}"
                                           Grid.RowSpan="2"
-                                          Grid.Column="0"/>
+                                          Grid.Column="0" />
                                 <Label Text="{Binding TaskStageHeader}"
                                        Grid.Column="1"
-                                       Grid.Row="0"/>
+                                       Grid.Row="0" />
                                 <Label Text="{Binding TaskStageDesc}"
                                        Grid.Column="1"
                                        Grid.Row="1" />
+                                <Button Text="D" 
+                                        x:Name="DeleteStageButton"
+                                        Clicked="DeleteStageButton_Clicked"
+                                        Grid.Column="2"
+                                        Grid.RowSpan="2"/>
+
                             </Grid>
                         </ViewCell>
                     </DataTemplate>

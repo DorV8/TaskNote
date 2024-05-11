@@ -167,4 +167,14 @@ public partial class TaskPage : ContentPage
         Console.WriteLine("editedTask.TaskHeader = " + editedTask.TaskHeader);
         Console.WriteLine("currentTask.TaskHeader = " + currentTask.TaskHeader);
     }
+
+    private async void DeleteStageButton_Clicked(object sender, EventArgs e)
+    {
+        var item = ((Button)sender).BindingContext;
+        var answer = await DisplayAlert("Удаление", "Хотите удалить эту подзадачу?", "Да", "Нет");
+        if (answer == true)
+        {
+            instanse.Data.EditedTask.AllStages.Remove(item as TaskStageItem);
+        }
+    }
 }
