@@ -15,22 +15,18 @@ namespace NewTaskNote
         public ModelManager()
         {
             Data = new ModelData();
-            AddNotesSample();
-            AddTasksSample();
+            AddSampleNotes();
+            AddSampleTasks();
         }
-
-        private int notesSampleGroup = 0;
-
-        public void AddNotesSample()
+        public void AddSampleNotes()
         {
-            notesSampleGroup += 1;
             foreach (var note in GetSampleNotes())
             {
                 Data.AddNote(note);
             }
         }
 
-        public void AddTasksSample()
+        public void AddSampleTasks()
         {
             foreach(var task in GetSampleTasks())
             {
@@ -38,9 +34,9 @@ namespace NewTaskNote
             }
         }
 
-        public static List<TaskItem> GetSampleTasks()
+        public List<TaskItem> GetSampleTasks()
         {
-            List<TaskItem> result = [];
+            /*List<TaskItem> result = [];
 
             for (var i = 0; i < 10; i++)
             {
@@ -52,26 +48,14 @@ namespace NewTaskNote
                 );
             }
 
-            return result;
+            return result;*/
+            Data.database.InsertSamplesTasks();
+            return Data.database.GetTasks();
         }
         public List<NoteItem> GetSampleNotes()
         {
-            Data.database.InsertSamples();
+            Data.database.InsertSamplesNotes();
             return Data.database.GetNotes();
         }
-        /*public static List<NoteItem> GetSampleNotes(int groupIndex)
-        {
-            List<NoteItem> result = [];
-
-            string longString = "Длинный предлинный текст который представляет из себя целый абзац и нужен для проверки.";
-
-            result.Add(new NoteItem(String.Format("Записка в группе [{0}]. Обычная строка", groupIndex), new CategoryNote { ID = CategoryNote.ID.Work}, false));
-            result.Add(new NoteItem(String.Format("Записка в группе [{0}]. Длинный текст", groupIndex), new CategoryNote { ID = CategoryNote.ID.Study }, false));
-            result.Add(new NoteItem(String.Format("Записка в группе [{0}]. Очень длинный текст. Зеленая категория {1}", groupIndex, longString), new CategoryNote { ID = CategoryNote.ID.Home }, false));
-            result.Add(new NoteItem(String.Format("Записка в группе [{0}]. Избранное", groupIndex), new CategoryNote { ID = CategoryNote.ID.Plans }, true));
-            result.Add(new NoteItem(String.Format("Записка в группе [{0}]. Красная категория", groupIndex), new CategoryNote { ID = CategoryNote.ID.Purchases }, false));
-
-            return result;
-        }*/
     }
 }

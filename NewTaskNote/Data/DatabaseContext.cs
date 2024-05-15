@@ -1,4 +1,5 @@
-﻿using Microsoft.Data.Sqlite;
+﻿
+using Microsoft.Data.Sqlite;
 
 namespace NewTaskNote
 {
@@ -110,7 +111,7 @@ namespace NewTaskNote
             Console.WriteLine("Таблица заметок успешно создана");
         }
 
-        public void InsertSamples()
+        public void InsertSamplesNotes()
         {
             using var connection = new SqliteConnection($"Data Source={DbPath}");
             connection.Open();
@@ -158,12 +159,6 @@ namespace NewTaskNote
                         Color = GetCategoryColorById(reader.GetInt32(3))
                     }
                 };
-                /*note.id = reader.GetInt32(0);
-                note.NoteText = reader.GetString(1);
-                note.IsFavorite = reader.GetBoolean(2);
-                note.Category = new CategoryNote() { ID = reader.GetInt32(3) };
-                note.Category.NameCategory = GetCategoryNameById(note.Category.ID);
-                note.Category.Color = GetCategoryColorById(note.Category.ID);*/
                 result.Add(note);
             }
             connection.Close();
@@ -181,20 +176,76 @@ namespace NewTaskNote
                     "ModDate DATE," +
                     "Header TEXT," +
                     "Desc TEXT," +
-                    "IsFavorite BOOL," +
+                    "IsFavorite BOOLEAN," +
+                    "IsAlarmed BOOLEAN," +
                     "AlarmDate DATE" +
                ")";
             CreateTable(commandString);
         }
+        public void InsertSamplesTasks()
+        {
+            for(int i = 0; i < 10; i++)
+            {
+                var item = new TaskItem()
+                {
+                    ModDate = DateTime.Now,
+                    TaskHeader = "Задача номер " + i,
+                    TaskDesc = "Описание задачи номер " + i,
+                    IsFavorite = false,
+                    IsAlarmed = false,
+                    AlarmDate = DateTime.MinValue
+                };
+                AddTask(item);
+            }            
+        }
+        public List<TaskItem> GetTasks()
+        {
+            var result = new List<TaskItem>();
+            using var connection = new SqliteConnection($"Data Source={DbPath}");
+            connection.Open();
+
+            using var command = new SqliteCommand("SELECT * FROM Tasks", connection);
+            var reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                var item = new TaskItem()
+                {
+                    id = reader.GetInt32(0),
+                    ModDate = reader.GetDateTime(1),
+                    TaskHeader = reader.GetString(2),
+                    TaskDesc = reader.GetString(3),
+                    IsFavorite = reader.GetBoolean(4),
+                    IsAlarmed = reader.GetBoolean(5),
+                    AlarmDate = reader.GetDateTime(6)
+                };
+                result.Add(item);
+            }
+            return result;
+        }
 
         public void AddTask(TaskItem item)
         {
-            //
+            using var connection = new SqliteConnection($"Data Source={DbPath}");
+            connection.Open();
+
+            var commandString = "INSERT INTO Tasks(ModDate, Header, Desc, IsFavorite, IsAlarmed, AlarmDate) " +
+                                "VALUES(@modDate, @header, @desc, @fav, @isAlarmed, @AlarmDate)";
+            using var command = new SqliteCommand(commandString, connection);
+            command.Parameters.AddRange(new[]
+            {
+                new SqliteParameter("@modDate", item.ModDate),
+                new SqliteParameter("@header", item.TaskHeader),
+                new SqliteParameter("@desc", item.TaskDesc),
+                new SqliteParameter("@fav", item.IsFavorite),
+                new SqliteParameter("@isAlarmed", item.IsAlarmed),
+                new SqliteParameter("@AlarmDate", item.AlarmDate)
+            });
+            command.ExecuteNonQuery();
         }
 
         public void RemoveTask(TaskItem item)
         {
-
+            
         }
 
         public void RewriteTask(TaskItem oldItem, TaskItem newItem)
@@ -210,7 +261,7 @@ namespace NewTaskNote
                     "Id INT PRIMARY KEY," +
                     "Header TEXT," +
                     "Desc TEXT," +
-                    "isFinished BOOL," +
+                    "isFinished BOOLEAN," +
                     "id_task INT," +
                     "FOREIGN KEY(id_task) REFERENCES Tasks(Id)" +
                 ")";
