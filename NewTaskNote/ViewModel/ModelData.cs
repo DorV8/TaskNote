@@ -103,6 +103,23 @@ namespace NewTaskNote
             AllTasks.Add(item);
         }
 
+        public TaskItem CopyTask(TaskItem item)
+        {
+            var task = new TaskItem()
+            {
+                id = item.id,
+                TaskHeader = item.TaskHeader,
+                TaskDesc = item.TaskDesc,
+                AllStages = item.AllStages,
+                AlarmDate = item.AlarmDate,
+                CurrentStage = item.CurrentStage,
+                IsAlarmed = item.IsAlarmed,
+                IsFavorite = item.IsFavorite,
+                ModDate = item.ModDate
+            };
+            return task;
+        }
+
         public void RemoveTask(TaskItem item)
         {
             AllTasks.Remove(item);

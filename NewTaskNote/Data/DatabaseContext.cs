@@ -27,7 +27,8 @@ namespace NewTaskNote
             using var connection = new SqliteConnection($"Data Source={DbPath}");
             connection.Open();
             using var command = new SqliteCommand(commandString, connection);
-            command.ExecuteNonQuery();
+            var test = "создание таблицы: " + command.ExecuteNonQuery(); 
+            Console.WriteLine(test);
             connection.Close();
         }
 
@@ -159,6 +160,7 @@ namespace NewTaskNote
                         Color = GetCategoryColorById(reader.GetInt32(3))
                     }
                 };
+                var table = reader.GetSchemaTable();
                 result.Add(note);
             }
             connection.Close();
@@ -172,7 +174,7 @@ namespace NewTaskNote
         {
             var commandString = "CREATE TABLE IF NOT EXISTS Tasks " +
                 "(" +
-                    "Id INT PRIMARY KEY," +
+                    "Id INTEGER PRIMARY KEY," +
                     "ModDate DATE," +
                     "Header TEXT," +
                     "Desc TEXT," +
@@ -184,7 +186,12 @@ namespace NewTaskNote
         }
         public void InsertSamplesTasks()
         {
-            for(int i = 0; i < 10; i++)
+            using var connection = new SqliteConnection($"Data Source={DbPath}");
+            connection.Open();
+            using var clearCommand = new SqliteCommand("DELETE FROM Tasks WHERE Id>0", connection);
+            clearCommand.ExecuteNonQuery();
+            connection.Close();
+            for (int i = 0; i < 10; i++)
             {
                 var item = new TaskItem()
                 {
@@ -210,7 +217,7 @@ namespace NewTaskNote
             {
                 var item = new TaskItem()
                 {
-                    id = reader.GetInt32(0),
+                    id = Int32.Parse(reader.GetInt64(0).ToString()),
                     ModDate = reader.GetDateTime(1),
                     TaskHeader = reader.GetString(2),
                     TaskDesc = reader.GetString(3),
@@ -218,6 +225,7 @@ namespace NewTaskNote
                     IsAlarmed = reader.GetBoolean(5),
                     AlarmDate = reader.GetDateTime(6)
                 };
+                var table = reader.GetSchemaTable();
                 result.Add(item);
             }
             return result;
@@ -258,7 +266,7 @@ namespace NewTaskNote
         {
             var commandString = "CREATE TABLE IF NOT EXISTS Stages" +
                 "(" +
-                    "Id INT PRIMARY KEY," +
+                    "Id INTEGER PRIMARY KEY," +
                     "Header TEXT," +
                     "Desc TEXT," +
                     "isFinished BOOLEAN," +

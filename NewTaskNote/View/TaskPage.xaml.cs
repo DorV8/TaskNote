@@ -12,19 +12,8 @@ public partial class TaskPage : ContentPage
 
     public TaskPage()
     {
-        InitializeComponent();
-        var task = new TaskItem()
-        {
-            TaskHeader = instanse.Data.CurrentTask.TaskHeader,
-            TaskDesc = instanse.Data.CurrentTask.TaskDesc,
-            AllStages = instanse.Data.CurrentTask.AllStages,
-            AlarmDate = instanse.Data.CurrentTask.AlarmDate,
-            CurrentStage = instanse.Data.CurrentTask.CurrentStage,
-            IsAlarmed = instanse.Data.CurrentTask.IsAlarmed,
-            IsFavorite = instanse.Data.CurrentTask.IsFavorite,
-            ModDate = instanse.Data.CurrentTask.ModDate
-        };
-        instanse.Data.EditedTask = task;
+        InitializeComponent(); 
+        instanse.Data.EditedTask = instanse.Data.CopyTask(instanse.Data.CurrentTask);
 
         currentTask = instanse.Data.CurrentTask;
         editedTask = instanse.Data.EditedTask;
