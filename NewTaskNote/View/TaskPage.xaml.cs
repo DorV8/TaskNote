@@ -35,11 +35,13 @@ public partial class TaskPage : ContentPage
             if (name != null)
             {
                 var desc = await DisplayPromptAsync("Создание задачи", "Введите описание задачи:", "ОК", "Отмена");
-                editedTask.AddStage(new TaskStageItem()
+                var item = new TaskStageItem()
                 {
                     TaskStageHeader = name,
                     TaskStageDesc = desc
-                });
+                };
+                editedTask.AddStage(item);
+                instanse.Data.database.AddStage(item, currentTask.id);
             }
         }
         catch { }
@@ -67,7 +69,7 @@ public partial class TaskPage : ContentPage
     private void SetCurrentTask()
     {
         instanse.Data.RewriteTask(currentTask, editedTask);
-        //здесь будет запись в бд
+        instanse.Data.database.RewriteTask(currentTask.id, editedTask);
     }
 
     private async void FinishTask_Clicked(object sender, EventArgs e)
@@ -151,19 +153,14 @@ public partial class TaskPage : ContentPage
                                 .AddSeconds(DateTime.Now.Second);
     }
 
-    private void HeaderEntry_TextChanged(object sender, TextChangedEventArgs e)
-    {
-        Console.WriteLine("editedTask.TaskHeader = " + editedTask.TaskHeader);
-        Console.WriteLine("currentTask.TaskHeader = " + currentTask.TaskHeader);
-    }
-
     private async void DeleteStageButton_Clicked(object sender, EventArgs e)
     {
-        var item = ((Button)sender).BindingContext;
+        var item = ((Button)sender).BindingContext as TaskStageItem;
         var answer = await DisplayAlert("Удаление", "Хотите удалить эту подзадачу?", "Да", "Нет");
         if (answer == true)
         {
-            editedTask.RemoveStage(item as TaskStageItem);
+            editedTask.RemoveStage(item);
+            instanse.Data.database.RemoveStage(item.id);
         }
     }
 }

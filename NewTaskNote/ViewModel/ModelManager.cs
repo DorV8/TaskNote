@@ -1,4 +1,6 @@
 ﻿
+using System.Collections.ObjectModel;
+
 namespace NewTaskNote
 {
     public class ModelManager
@@ -15,8 +17,8 @@ namespace NewTaskNote
         public ModelManager()
         {
             Data = new ModelData();
-            AddSampleNotes();
-            AddSampleTasks();
+            //AddSampleNotes();
+            //AddSampleTasks();
         }
         public void AddSampleNotes()
         {
@@ -34,7 +36,7 @@ namespace NewTaskNote
             }
         }
 
-        public List<TaskItem> GetSampleTasks()
+        public ObservableCollection<TaskItem> GetSampleTasks()
         {
             /*List<TaskItem> result = [];
 
@@ -52,7 +54,7 @@ namespace NewTaskNote
             Data.database.InsertSamplesTasks();
             return Data.database.GetTasks();
         }
-        public List<NoteItem> GetSampleNotes()
+        public ObservableCollection<NoteItem> GetSampleNotes()
         {
             Data.database.InsertSamplesNotes();
             return Data.database.GetNotes();

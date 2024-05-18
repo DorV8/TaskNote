@@ -4,6 +4,7 @@ namespace NewTaskNote
 {
     public class TaskStageItem : BindableBase
     {
+        public int id;
         public string TaskStageHeader { get; set; }
         public string TaskStageDesc { get; set; }
         private bool _IsCompleted;

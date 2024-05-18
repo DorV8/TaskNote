@@ -7,8 +7,8 @@ public partial class TasksPage : ContentPage
 	{
 		InitializeComponent();
 		this.BindingContext = instanse.Data;
-		TasksList.ItemsSource = instanse.Data.OrderedAllTasks;
-	}
+        TasksList.ItemsSource = instanse.Data.OrderedAllTasks;
+    }
 
     private async void AddTaskButton_Clicked(object sender, EventArgs e)
     {
@@ -17,14 +17,17 @@ public partial class TasksPage : ContentPage
         {
             var desc = await DisplayPromptAsync("Создание задачи", "Введите описание задачи:", "ОК", "Отмена");
             if (desc != null)
-            {   
-                instanse.Data.AddTask(new TaskItem()
+            {
+                var item = new TaskItem()
                 {
                     TaskHeader = name,
                     TaskDesc = desc == "" ? "Нет описания" : desc,
                     IsFavorite = false,
                     IsAlarmed = false
-                });
+                };
+                instanse.Data.AddTask(item);
+                instanse.Data.database.AddTask(item);
+                TasksList.ItemsSource = instanse.Data.OrderedAllTasks;
             }
         }
     }
@@ -46,11 +49,13 @@ public partial class TasksPage : ContentPage
 
     private async void DeleteTaskMenuItem_Clicked(object sender, EventArgs e)
     {
-        var param = ((MenuItem)sender).CommandParameter;
+        var param = ((MenuItem)sender).CommandParameter as TaskItem;
         var answer = await DisplayAlert("Удаление", "Хотите удалить эту задачу?", "Да", "Нет");
         if (answer == true)
         {
-            instanse.Data.RemoveTask(param as TaskItem);
+            instanse.Data.RemoveTask(param);
+            instanse.Data.database.RemoveTask(param);
+            TasksList.ItemsSource = instanse.Data.OrderedAllTasks;
             //здесь будет удаление из БД
         }
     }

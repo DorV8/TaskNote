@@ -12,7 +12,7 @@
                FontSize="Large" />
         <ScrollView Grid.Row="1">
             <ListView x:Name="TasksList"
-                      BindingContext="AllTasks"
+                      BindingContext="OrderedAllTasks"
                       ItemSelected="TasksList_ItemSelected">
                 <ListView.ItemTemplate>
                     <DataTemplate>

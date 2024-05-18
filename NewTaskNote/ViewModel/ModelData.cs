@@ -62,12 +62,17 @@ namespace NewTaskNote
         {
             database = new();
             AllNotes = [];
+            GetNotes();
             SetCategorys();
             AllTasks = [];
+            GetTasks();
         }
 
         //****************************************************
-
+        public void GetNotes()
+        {
+            AllNotes = database.GetNotes();
+        }
         public void AddNote(NoteItem item)
         {
             AllNotes.Add(item);
@@ -97,7 +102,10 @@ namespace NewTaskNote
         }
 
         //****************************************************
-
+        public void GetTasks()
+        {
+            AllTasks = database.GetTasks();
+        }
         public void AddTask(TaskItem item)
         {
             AllTasks.Add(item);
@@ -123,6 +131,7 @@ namespace NewTaskNote
         public void RemoveTask(TaskItem item)
         {
             AllTasks.Remove(item);
+            OrderedAllTasks.Remove(item);
         }
 
         public void RewriteTask(TaskItem oldItem, TaskItem newItem)

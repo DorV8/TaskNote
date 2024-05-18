@@ -8,7 +8,6 @@
         <Entry x:Name="HeaderEntry"
                Text="{Binding TaskHeader}"
                Grid.Row="0"
-               TextChanged="HeaderEntry_TextChanged"
                />
         <Entry x:Name="DescEntry"
                Text="{Binding TaskDesc}"
