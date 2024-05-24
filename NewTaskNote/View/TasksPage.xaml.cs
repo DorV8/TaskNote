@@ -56,7 +56,6 @@ public partial class TasksPage : ContentPage
             instanse.Data.RemoveTask(param);
             instanse.Data.database.RemoveTask(param);
             TasksList.ItemsSource = instanse.Data.OrderedAllTasks;
-            //здесь будет удаление из БД
         }
     }
 }

@@ -39,15 +39,6 @@ public partial class NotePage : ContentPage
         CategoryPicker.SelectedIndex = editedNote.IsNullOrDefault() ?
                                        CategoryPicker.SelectedIndex = CategoryPicker.Items.Count() - 1 :
                                        (int)editedNote.Category.ID - 1;
-        /*try
-        {
-            if (editedNote.IsNullOrDefault()) { CategoryPicker.SelectedIndex = CategoryPicker.Items.Count() - 1; }
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine("something messed up \n" + ex);
-        }
-        CategoryPicker.SelectedIndex = (int)editedNote.Category.ID - 1;*/
         this.BindingContext = editedNote;
     }
 

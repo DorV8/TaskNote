@@ -32,7 +32,7 @@ public partial class TaskPage : ContentPage
         var name = await DisplayPromptAsync("Создание задачи", "Введите название задачи:", "ОК", "Отмена");
         try
         {
-            if (name != null)
+            if ((name !="") && (name != null))
             {
                 var desc = await DisplayPromptAsync("Создание задачи", "Введите описание задачи:", "ОК", "Отмена");
                 var item = new TaskStageItem()

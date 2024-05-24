@@ -4,8 +4,12 @@
              x:Class="NewTaskNote.NotePage"
              Title="NotePage"
              Appearing="ContentPage_Appearing">
-    <Grid RowDefinitions="*, Auto">
-        <Grid Grid.Row="0"
+    <Grid RowDefinitions="Auto, *, Auto">
+        <Label HorizontalOptions="End"
+               Grid.Row="0"
+               x:Name="ModDateLabel"
+               Text="{Binding FormattedDate, StringFormat='Дата изменения: {0}'}"/>
+        <Grid Grid.Row="1"
               RowDefinitions="250, Auto, Auto">
             <Editor Grid.Row="0"
                     x:Name="NoteTextEditor"
@@ -23,7 +27,7 @@
                     Title="Категория"
                     SelectedIndexChanged="CategoryPicker_SelectedIndexChanged"/>
         </Grid>
-        <StackLayout Grid.Row="1"
+        <StackLayout Grid.Row="2"
               Orientation="Horizontal"
               x:Name="ButtonsStack"
               HorizontalOptions="FillAndExpand">
