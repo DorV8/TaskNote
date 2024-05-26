@@ -52,8 +52,10 @@
                 </ListView.ItemTemplate>
             </ListView>
         </ScrollView>
-        <Button Text="+"
+        <ImageButton
+                Source="add_icon.png"
                 Grid.Row="2"
+                Scale="0.5"
                 HorizontalOptions="Center"
                 VerticalOptions="End"
                 x:Name="AddTaskButton"

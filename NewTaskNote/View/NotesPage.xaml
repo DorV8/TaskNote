@@ -43,7 +43,9 @@
                 </ListView.ItemTemplate>
             </ListView>
         </ScrollView>
-        <Button Text="Добавить"
+        <ImageButton
+                Source="add_icon.png"
+                Scale="0.5"
                 Grid.Row="3"
                 x:Name="AddButton"
                 Clicked="AddButton_Clicked"/>

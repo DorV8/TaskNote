@@ -12,7 +12,8 @@
         <Entry x:Name="DescEntry"
                Text="{Binding TaskDesc}"
                Grid.Row="1"/>
-        <Button x:Name="FavoriteButton"
+        <ImageButton
+                x:Name="FavoriteButton"
                 Grid.Row="2"
                 HorizontalOptions="Start"
                 Clicked="FavoriteButton_Clicked"
@@ -51,7 +52,9 @@
                                 <Label Text="{Binding TaskStageDesc}"
                                        Grid.Column="1"
                                        Grid.Row="1" />
-                                <Button Text="D" 
+                                <ImageButton 
+                                        Source="delete_stage_icon.png"
+                                        Scale="0.8"
                                         x:Name="DeleteStageButton"
                                         Clicked="DeleteStageButton_Clicked"
                                         Grid.Column="2"
@@ -63,18 +66,19 @@
                 </ListView.ItemTemplate>    
             </ListView>
         </ScrollView>
-        <Button Text="+"
+        <ImageButton
+                Source="add_icon.png"
+                Scale="0.5"
                 x:Name="AddStageButton"
                 Clicked="AddStageButton_Clicked" 
                 HorizontalOptions="Center"
                 VerticalOptions="End"
-                Grid.Row="6"
-                Margin="10"/>
+                Grid.Row="6"/>
         <Button Text="Завершить задачу"
                 x:Name="FinishTask"
                 Clicked="FinishTask_Clicked"
                 VerticalOptions="End"
                 Grid.Row="7"
-                Margin="5" />
+                Margin="5"/>
     </Grid>
 </ContentPage>

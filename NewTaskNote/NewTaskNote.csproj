@@ -61,16 +61,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiImage Remove="Resources\Images\favorite.png" />
-	  <MauiImage Remove="Resources\Images\not_favorite.png" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <EmbeddedResource Include="Resources\Images\favorite.png" />
-	  <EmbeddedResource Include="Resources\Images\not_favorite.png" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<PackageReference Include="Acr.UserDialogs" Version="9.0.0" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
 		<PackageReference Include="Microsoft.Data.Sqlite.Core" Version="8.0.4" />

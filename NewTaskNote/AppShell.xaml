@@ -6,11 +6,17 @@
        Shell.FlyoutBehavior="Disabled"
        Title="NewTaskNote">
     <TabBar>
-        <Tab Title="Заметки">
+        <Tab Title="Заметки"
+             Icon="notes_icon.png">
             <ShellContent ContentTemplate="{DataTemplate local:NotesPage}" />
         </Tab>
-        <Tab Title="Задачи">
+        <Tab Title="Задачи"
+             Icon="tasks_icon.png">
             <ShellContent ContentTemplate="{DataTemplate local:TasksPage}" />
+        </Tab>
+        <Tab Title="Настройки"
+             Icon="settings_icon.png">
+            <ShellContent ContentTemplate="{DataTemplate local:SettingsPage}" />
         </Tab>
     </TabBar>
 </Shell>

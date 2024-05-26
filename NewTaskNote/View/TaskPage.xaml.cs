@@ -85,7 +85,7 @@ public partial class TaskPage : ContentPage
 
     private void SetFavorite()
     {
-        FavoriteButton.Text = editedTask.IsFavorite ? "Убрать из избранного" : "Добавить в избранное";
+        FavoriteButton.Source = editedTask.IsFavorite ? "favorite.png" : "not_favorite.png";
     }
     
 
@@ -155,7 +155,7 @@ public partial class TaskPage : ContentPage
 
     private async void DeleteStageButton_Clicked(object sender, EventArgs e)
     {
-        var item = ((Button)sender).BindingContext as TaskStageItem;
+        var item = ((ImageButton)sender).BindingContext as TaskStageItem;
         var answer = await DisplayAlert("Удаление", "Хотите удалить эту подзадачу?", "Да", "Нет");
         if (answer == true)
         {

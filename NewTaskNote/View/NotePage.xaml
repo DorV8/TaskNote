@@ -31,16 +31,24 @@
               Orientation="Horizontal"
               x:Name="ButtonsStack"
               HorizontalOptions="FillAndExpand">
-            <Button Text="Сохранить"
+            <ImageButton
+                    Source="save_new_icon.png"
                     Grid.Column="0"
+                    BackgroundColor="ForestGreen"
+                    CornerRadius="10"
                     x:Name="SaveButton"
                     Clicked="SaveButton_Clicked"
-                    HorizontalOptions="FillAndExpand"/>
-            <Button Text="Удалить"
+                    HorizontalOptions="FillAndExpand"
+                    Margin="5"/>
+            <ImageButton 
+                    Source="delete_icon.png"
                     Grid.Column="1"
+                    BackgroundColor="OrangeRed"
+                    CornerRadius="10"
                     x:Name="DeleteButton"
                     Clicked="DeleteButton_Clicked"
-                    HorizontalOptions="FillAndExpand"/>
+                    HorizontalOptions="FillAndExpand"
+                    Margin="5"/>
         </StackLayout>
     </Grid>
 </ContentPage>
