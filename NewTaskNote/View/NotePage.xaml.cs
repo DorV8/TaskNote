@@ -1,4 +1,6 @@
 using Shiny;
+using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Maui.Core;
 
 namespace NewTaskNote;
 
@@ -14,6 +16,7 @@ public partial class NotePage : ContentPage
         GetCategoryOptions();
         instanse.Data.EditedNote = new NoteItem();
         DeleteButton.IsVisible = false;
+        ModDateLabel.IsVisible = false;
 	}
     public NotePage(NoteItem note)
     {
@@ -21,7 +24,6 @@ public partial class NotePage : ContentPage
         GetCategoryOptions();
         instanse.Data.CurrentNote = note;
         instanse.Data.EditedNote = note;
-        editedNote = instanse.Data.EditedNote;
     }
     private void GetCategoryOptions()
     {
@@ -40,6 +42,7 @@ public partial class NotePage : ContentPage
                                        CategoryPicker.SelectedIndex = CategoryPicker.Items.Count() - 1 :
                                        (int)editedNote.Category.ID - 1;
         this.BindingContext = editedNote;
+        SetFavorite();
     }
 
     //*******************************************
@@ -75,10 +78,9 @@ public partial class NotePage : ContentPage
             Navigation.PopModalAsync();
         }
     }
-
-    private void FavoriteSwitch_Toggled(object sender, ToggledEventArgs e)
+    private void SetFavorite()
     {
-        editedNote.IsFavorite = FavoriteSwitch.IsToggled;
+        FavoriteButton.Source = editedNote.IsFavorite ? "favorite.png" : "not_favorite.png";
     }
 
     private void CategoryPicker_SelectedIndexChanged(object sender, EventArgs e)
@@ -95,5 +97,13 @@ public partial class NotePage : ContentPage
             NameCategory = instanse.Data.database.GetCategoryNameById(SelectedCategory),
             Color = instanse.Data.database.GetCategoryColorById(SelectedCategory)
         };
+    }
+
+    private void FavoriteButton_Clicked(object sender, EventArgs e)
+    {
+        editedNote.IsFavorite = !editedNote.IsFavorite;
+        var toast = Toast.Make(editedNote.IsFavorite ? "Установлен статус избранного" : "Убран статус избранного", ToastDuration.Long, 14);
+        toast.Show();
+        SetFavorite();
     }
 }

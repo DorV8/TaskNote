@@ -14,14 +14,11 @@
             <Editor Grid.Row="0"
                     x:Name="NoteTextEditor"
                     Text="{Binding NoteText}"/>
-            <HorizontalStackLayout Grid.Row="1">
-                <Label Text="Избранное:"
-                       VerticalOptions="Center"/>
-                <Switch x:Name="FavoriteSwitch"
-                        IsToggled="{Binding IsFavorite}"
-                        Toggled="FavoriteSwitch_Toggled"
-                        VerticalOptions="Center"/>
-            </HorizontalStackLayout>
+            <ImageButton x:Name="FavoriteButton"
+                         Grid.Row="1"
+                         HorizontalOptions="Start"
+                         Clicked="FavoriteButton_Clicked"
+                         Margin="5,0,0,5" />
             <Picker Grid.Row="2"
                     x:Name="CategoryPicker"
                     Title="Категория"

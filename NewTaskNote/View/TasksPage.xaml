@@ -4,12 +4,16 @@
              x:Class="NewTaskNote.TasksPage"
              Appearing="ContentPage_Appearing">
     <Grid RowDefinitions="Auto, *, Auto">
-        <Label Text="Задачи"
-               HorizontalOptions="Start"
-               Grid.Row="0"
-               VerticalOptions="Center"
-               Margin="15,0,0,0"
-               FontSize="Large" />
+        <Grid Grid.Row="0"
+              RowDefinitions="Auto"
+              BackgroundColor="LightGray">
+            <Label Text="Задачи"
+                   HorizontalOptions="Start"
+                   Grid.Row="0"
+                   VerticalOptions="Center"
+                   Margin="15,0,0,0"
+                   FontSize="Large" />
+        </Grid>
         <ScrollView Grid.Row="1">
             <ListView x:Name="TasksList"
                       BindingContext="OrderedAllTasks"

@@ -39,6 +39,7 @@ namespace NewTaskNote
         public NoteItem()
         {
             ModDate = DateTime.Now;
+            IsFavorite = false;
         }
 
         public NoteItem(string text, CategoryNote category, bool isFavorite)

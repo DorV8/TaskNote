@@ -1,12 +1,29 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="NewTaskNote.SettingsPage"
-             Title="SettingsPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to Settings"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+             x:Class="NewTaskNote.SettingsPage">
+    <Grid RowDefinitions="Auto, *, Auto">
+        <Grid Grid.Row="0"
+              BackgroundColor="LightGray">
+            <Label Text="Настройки"
+                   HorizontalOptions="Start"
+                   VerticalOptions="Center"
+                   Grid.Row="0"
+                   Margin="15,0,0,0"
+                   FontSize="Large" />
+        </Grid>
+        <Grid Grid.Row="1"
+              RowDefinitions="Auto, Auto">
+            <Picker x:Name="FontPicker"
+                    Grid.Row="0"
+                    Title="Шрифт:"/>
+            <Picker x:Name="ThemePicker"
+                    Grid.Row="1"
+                    Title="Тема приложения:"/>
+        </Grid>
+        <Button 
+            x:Name="SaveButton"
+            Text="Сохранить изменения"
+            Grid.Row="2"/>
+    </Grid>
 </ContentPage>

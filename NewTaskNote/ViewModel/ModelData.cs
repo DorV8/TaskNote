@@ -1,11 +1,35 @@
 ﻿
 using System.Collections.ObjectModel;
+using Font = Microsoft.Maui.Font;
 
 namespace NewTaskNote
 {
     public class ModelData
     {
         public DatabaseContext database;
+
+        //****************************************************
+
+        public List<Font> fonts = [];//добавить шрифты
+
+        private void SetFonts()
+        {
+        }
+
+        public List<string> fontNames
+        {
+            get
+            {
+                var result = new List<string>();
+                foreach (var font in fonts)
+                {
+                    result.Add(font.Family);
+                }
+                return result;
+            }
+        }
+
+        //****************************************************
         public List<CategoryNote> categorys { get; private set; }
         private static ObservableCollection<NoteItem> GetReverse(ObservableCollection<NoteItem> collection)
         {
@@ -22,6 +46,9 @@ namespace NewTaskNote
         {
             categorys = database.GetCategorys();
         }
+
+        //****************************************************
+
         public ObservableCollection<NoteItem> AllNotes { get; set; }
         public ObservableCollection<NoteItem> ReversedAllNotes
         {
@@ -92,7 +119,14 @@ namespace NewTaskNote
         public void SortNotes(int ID, string TextPiece)
         {
             IEnumerable<NoteItem> filtered = null;
-            filtered = AllNotes.Where(note => note.Category.ID == ID);
+            if (categorys.Count-1 < ID)
+            {
+                filtered = AllNotes.Where(note => note.IsFavorite == true);
+            }
+            else
+            {
+                filtered = AllNotes.Where(note => note.Category.ID == ID);
+            }
              
             if (TextPiece != "")
             {

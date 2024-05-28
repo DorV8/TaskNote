@@ -32,7 +32,6 @@ namespace NewTaskNote
             Console.WriteLine(test);
             connection.Close();
         }
-
         //*******************************************************
         private void CreateCategorys()
         {

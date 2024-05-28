@@ -23,6 +23,7 @@ public partial class NotesPage : ContentPage
         {
             result.Add(item.NameCategory);
         }
+        result.Add("Избранное");
         MenuPicker.ItemsSource = result;
     }
     protected override bool OnBackButtonPressed()
@@ -80,7 +81,7 @@ public partial class NotesPage : ContentPage
     }
 
     private void SearchEntry_TextChanged(object sender, TextChangedEventArgs e)
-    {
+    {   
         if (SearchEntry.Text != "")
         {
             SortNotes();

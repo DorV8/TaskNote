@@ -1,4 +1,6 @@
 using Acr.UserDialogs;
+using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Maui.Core;
 using Microsoft.Maui.Handlers;
 using Plugin.LocalNotification;
 
@@ -92,6 +94,8 @@ public partial class TaskPage : ContentPage
     private void FavoriteButton_Clicked(object sender, EventArgs e)
     {
         editedTask.IsFavorite = !editedTask.IsFavorite;
+        var toast = Toast.Make(editedTask.IsFavorite ? "Установлен статус избранного" : "Убран статус избранного", ToastDuration.Long, 14);
+        toast.Show();
         SetFavorite();
     }
 
