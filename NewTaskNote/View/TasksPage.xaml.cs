@@ -1,3 +1,6 @@
+using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Maui.Core;
+
 namespace NewTaskNote;
 
 public partial class TasksPage : ContentPage
@@ -25,8 +28,18 @@ public partial class TasksPage : ContentPage
                     IsFavorite = false,
                     IsAlarmed = false
                 };
-                instanse.Data.AddTask(item);
-                instanse.Data.database.AddTask(item);
+                try
+                {
+                    instanse.Data.AddTask(item);
+                    instanse.Data.database.AddTask(item);
+                    var toast = Toast.Make("Задача создана", ToastDuration.Short, 14);
+                    toast.Show();
+                }
+                catch
+                {
+                    var toast = Toast.Make("Что-то пошло не так", ToastDuration.Short, 14);
+                    toast.Show();
+                }
                 TasksList.ItemsSource = instanse.Data.OrderedAllTasks;
             }
         }
@@ -53,8 +66,17 @@ public partial class TasksPage : ContentPage
         var answer = await DisplayAlert("Удаление", "Хотите удалить эту задачу?", "Да", "Нет");
         if (answer == true)
         {
-            instanse.Data.RemoveTask(param);
-            instanse.Data.database.RemoveTask(param);
+            try
+            {
+                instanse.Data.RemoveTask(param);
+                instanse.Data.database.RemoveTask(param);
+            }
+            catch (Exception ex)
+            {
+                var toast = Toast.Make("Что-то пошло не так", ToastDuration.Short, 14);
+                Console.WriteLine(ex.ToString());
+                toast.Show();
+            }
             TasksList.ItemsSource = instanse.Data.OrderedAllTasks;
         }
     }

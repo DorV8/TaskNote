@@ -7,8 +7,9 @@
     <Grid RowDefinitions="Auto, Auto, *, Auto">
         <Grid ColumnDefinitions="*, *"
               Grid.Row="0"
-              BackgroundColor="LightGray">
+              BackgroundColor="{AppThemeBinding Light={StaticResource Gray100},Dark={StaticResource Gray500}}">
             <Label Text="Заметки"
+                   TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"
                    HorizontalOptions="Start" 
                    Grid.Column="0"
                    VerticalOptions="Center"

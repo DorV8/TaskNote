@@ -22,17 +22,35 @@ namespace NewTaskNote
             CreateTasks();
             CreateStages();
         }
+        //*******************************************************
 
+        public void ClearData()
+        {
+            /*using var connection = new SqliteConnection($"Data Source={DbPath}");
+            connection.Open();
+
+            var commandString = "DELETE FROM Notes";
+
+            using var command = new SqliteCommand(commandString, connection);
+
+            connection.Close();*/
+        }
+
+        //*******************************************************
+        //Creating tables
         private void CreateTable(string commandString)
         {
             using var connection = new SqliteConnection($"Data Source={DbPath}");
             connection.Open();
             using var command = new SqliteCommand(commandString, connection);
-            var test = "создание таблицы: " + command.ExecuteNonQuery(); 
-            Console.WriteLine(test);
+            try
+            {
+                var test = command.ExecuteNonQuery();
+                Console.WriteLine(test);
+            }
+            catch (Exception ex) { Console.WriteLine(ex.ToString()); }
             connection.Close();
         }
-        //*******************************************************
         private void CreateCategorys()
         {
             var commandString =
@@ -45,7 +63,50 @@ namespace NewTaskNote
 
             AddCategorys();
         }
+        private void CreateNotes()
+        {
+            var commandString = "CREATE TABLE IF NOT EXISTS Notes " +
+                "(" +
+                    "Id_note INTEGER PRIMARY KEY," +
+                    "Note_text TEXT," +
+                    "isFavorite BOOLEAN," +
+                    "id_category INTEGER," +
+                    "ModDate DATE," +
+                    "FOREIGN KEY (id_category) REFERENCES Categorys(Id)" +
+                ")";
+            CreateTable(commandString);
+            Console.WriteLine("Таблица заметок успешно создана");
+        }
+        public void CreateTasks()
+        {
+            var commandString = "CREATE TABLE IF NOT EXISTS Tasks " +
+                "(" +
+                    "Id INTEGER PRIMARY KEY," +
+                    "ModDate DATE," +
+                    "Header TEXT," +
+                    "Desc TEXT," +
+                    "IsFavorite BOOLEAN," +
+                    "IsAlarmed BOOLEAN," +
+                    "AlarmDate DATE" +
+               ")";
+            CreateTable(commandString);
+        }
+        public void CreateStages()
+        {
+            var commandString = "CREATE TABLE IF NOT EXISTS Stages" +
+                "(" +
+                    "Id INTEGER PRIMARY KEY," +
+                    "Header TEXT," +
+                    "Desc TEXT," +
+                    "IsCompleted BOOLEAN," +
+                    "id_task INT," +
+                    "FOREIGN KEY(id_task) REFERENCES Tasks(Id)" +
+                ")";
+            CreateTable(commandString);
+        }
 
+        //*******************************************************
+        //categorys commands
         private static bool IsCategorysEmpty()
         {
             using var connection = new SqliteConnection($"Data Source={DbPath}");
@@ -94,303 +155,6 @@ namespace NewTaskNote
                 }
             }
         }
-
-        //*******************************************************
-
-        private void CreateNotes()
-        {
-            var commandString = "CREATE TABLE IF NOT EXISTS Notes " +
-                "(" +
-                    "Id_note INTEGER PRIMARY KEY," +
-                    "Note_text TEXT," +
-                    "isFavorite BOOLEAN," +
-                    "id_category INTEGER," +
-                    "ModDate DATE," +
-                    "FOREIGN KEY (id_category) REFERENCES Categorys(Id)" +
-                ")";
-            CreateTable(commandString);
-            Console.WriteLine("Таблица заметок успешно создана");
-        }
-
-        public void InsertSamplesNotes()
-        {
-            using var connection = new SqliteConnection($"Data Source={DbPath}");
-            connection.Open();
-            using var clearCommand = new SqliteCommand("DELETE FROM Notes WHERE Id_note>0", connection);
-            clearCommand.ExecuteNonQuery();
-
-            var commandString = "INSERT INTO Notes (Note_text, isFavorite, id_category, ModDate) VALUES (@text, @fav, @id, @date)";
-            Random rnd = new();
-            using var command = new SqliteCommand(commandString, connection);
-            for (int i = 0; i < 6; i++)
-            {
-                command.Parameters.Clear();
-                command.Parameters.AddRange(new[]
-                {
-                    new SqliteParameter("@text", "заметка " + i),
-                    new SqliteParameter("@fav", true),
-                    new SqliteParameter("@id", rnd.Next(1,6)),
-                    new SqliteParameter("@date", DateTime.Now)
-                });
-                command.ExecuteNonQuery();
-            }
-            connection.Close();
-        }
-
-        public ObservableCollection<NoteItem> GetNotes()
-        {
-            ObservableCollection<NoteItem> result = [];
-            using var connection = new SqliteConnection($"Data Source={DbPath}");
-            connection.Open();
-
-            var commandString = "SELECT * FROM Notes";
-            using var command = new SqliteCommand(commandString, connection);
-            var reader = command.ExecuteReader();
-            while (reader.Read())
-            {
-                NoteItem note = new() 
-                {
-                    id = reader.GetInt32(0),
-                    NoteText = reader.GetString(1),
-                    IsFavorite = reader.GetBoolean(2),
-                    Category = new CategoryNote()
-                    {
-                        ID = reader.GetInt32(3),
-                        NameCategory = GetCategoryNameById(reader.GetInt32(3)),
-                        Color = GetCategoryColorById(reader.GetInt32(3))
-                    }
-                };
-                result.Add(note);
-            }
-            connection.Close();
-
-            return result;
-        }
-
-        //*******************************************************
-
-        public void CreateTasks()
-        {
-            var commandString = "CREATE TABLE IF NOT EXISTS Tasks " +
-                "(" +
-                    "Id INTEGER PRIMARY KEY," +
-                    "ModDate DATE," +
-                    "Header TEXT," +
-                    "Desc TEXT," +
-                    "IsFavorite BOOLEAN," +
-                    "IsAlarmed BOOLEAN," +
-                    "AlarmDate DATE" +
-               ")";
-            CreateTable(commandString);
-        }
-        public void InsertSamplesTasks()
-        {
-            using var connection = new SqliteConnection($"Data Source={DbPath}");
-            connection.Open();
-            using var clearCommand = new SqliteCommand("DELETE FROM Tasks WHERE Id>0", connection);
-            clearCommand.ExecuteNonQuery();
-            connection.Close();
-            for (int i = 0; i < 10; i++)
-            {
-                var item = new TaskItem()
-                {
-                    ModDate = DateTime.Now,
-                    TaskHeader = "Задача номер " + i,
-                    TaskDesc = "Описание задачи номер " + i,
-                    IsFavorite = false,
-                    IsAlarmed = false,
-                    AlarmDate = DateTime.MinValue
-                };
-                AddTask(item);
-            }            
-        }
-        public ObservableCollection<TaskItem> GetTasks()
-        {
-            var result = new ObservableCollection<TaskItem>();
-            using var connection = new SqliteConnection($"Data Source={DbPath}");
-            connection.Open();
-
-            using var command = new SqliteCommand("SELECT * FROM Tasks", connection);
-            var reader = command.ExecuteReader();
-            while (reader.Read())
-            {
-                var item = new TaskItem()
-                {
-                    id = Int32.Parse(reader.GetInt64(0).ToString()),
-                    ModDate = reader.GetDateTime(1),
-                    TaskHeader = reader.GetString(2),
-                    TaskDesc = reader.GetString(3),
-                    IsFavorite = reader.GetBoolean(4),
-                    IsAlarmed = reader.GetBoolean(5),
-                    AlarmDate = reader.GetDateTime(6)
-                };
-                item.AllStages = GetStages(item.id);
-                result.Add(item);
-            }
-            connection.Close();
-            return result;
-        }
-
-        public void AddTask(TaskItem item)
-        {
-            using var connection = new SqliteConnection($"Data Source={DbPath}");
-            connection.Open();
-
-            var commandString = "INSERT INTO Tasks(ModDate, Header, Desc, IsFavorite, IsAlarmed, AlarmDate) " +
-                                "VALUES(@modDate, @header, @desc, @fav, @isAlarmed, @AlarmDate)";
-            using var command = new SqliteCommand(commandString, connection);
-            command.Parameters.AddRange(new[]
-            {
-                new SqliteParameter("@modDate", item.ModDate),
-                new SqliteParameter("@header", item.TaskHeader),
-                new SqliteParameter("@desc", item.TaskDesc),
-                new SqliteParameter("@fav", item.IsFavorite),
-                new SqliteParameter("@isAlarmed", item.IsAlarmed),
-                new SqliteParameter("@AlarmDate", item.AlarmDate)
-            });
-            command.ExecuteNonQuery();
-            connection.Close();
-        }
-
-        public void RemoveTask(TaskItem item)
-        {
-            using var connection = new SqliteConnection($"Data Source={DbPath}");
-            connection.Open();
-
-            using var command = new SqliteCommand("DELETE FROM Tasks WHERE Id = @id", connection);
-            command.Parameters.AddWithValue("@id", item.id);
-            command.ExecuteNonQuery();
-
-            connection.Close();
-        }
-
-        public void RewriteTask(int oldItemId, TaskItem newItem)
-        {
-            using var connection = new SqliteConnection($"Data Source={DbPath}");
-            connection.Open();
-            var commandString = "UPDATE Tasks SET " +
-                                "ModDate = @modDate," +
-                                "Header = @head," +
-                                "Desc = @desc," +
-                                "IsFavorite = @fav," +
-                                "IsAlarmed = @alarm," +
-                                "AlarmDate = @alarmDate " +
-                                "WHERE Id = @id";
-            using var command = new SqliteCommand(commandString, connection);
-            command.Parameters.AddRange(new[]
-            {
-                new SqliteParameter("@id", oldItemId),
-                new SqliteParameter("@modDate", newItem.ModDate),
-                new SqliteParameter("@head",newItem.TaskHeader),
-                new SqliteParameter("@desc", newItem.TaskDesc),
-                new SqliteParameter("fav", newItem.IsFavorite),
-                new SqliteParameter("@alarm",newItem.IsAlarmed),
-                new SqliteParameter("@alarmDate", newItem.AlarmDate)
-            });
-            command.ExecuteNonQuery();
-            connection.Close();
-        }
-        //*******************************************************
-
-        public void CreateStages()
-        {
-            var commandString = "CREATE TABLE IF NOT EXISTS Stages" +
-                "(" +
-                    "Id INTEGER PRIMARY KEY," +
-                    "Header TEXT," +
-                    "Desc TEXT," +
-                    "IsCompleted BOOLEAN," +
-                    "id_task INT," +
-                    "FOREIGN KEY(id_task) REFERENCES Tasks(Id)" +
-                ")";
-            CreateTable(commandString);
-        }
-
-        public ObservableCollection<TaskStageItem> GetStages(int id_task)
-        {
-            var result = new ObservableCollection<TaskStageItem>();
-
-            using var connection = new SqliteConnection($"Data Source={DbPath}");
-            connection.Open();
-
-            var commandString = "SELECT * FROM Stages WHERE id_task = @id";
-            using var command = new SqliteCommand(commandString, connection);
-            command.Parameters.AddWithValue("@id", id_task);
-            using var commandCount = new SqliteCommand("SELECT count(Id) FROM Stages", connection);
-            var count = Convert.ToInt64(commandCount.ExecuteScalar());
-            if (count > 0)
-            {
-                var reader = command.ExecuteReader();
-                while (reader.Read())
-                {
-                    result.Add(new TaskStageItem()
-                    {
-                        id = Int32.Parse(reader.GetInt64(0).ToString()),
-                        TaskStageHeader = reader.GetString(1),
-                        TaskStageDesc = reader.GetString(2),
-                        IsCompleted = reader.GetBoolean(3)
-                    });
-                }
-            }            
-            connection.Close();
-            return result;
-        }
-
-        public void AddStage(TaskStageItem item, int id_task)
-        {
-            using var connection = new SqliteConnection($"Data Source={DbPath}");
-            connection.Open();
-
-            var commandString = "INSERT INTO Stages(Header, Desc, IsCompleted, id_task) " +
-                                "VALUES(@head, @desc, @finish, @id_task)";
-            using var command = new SqliteCommand( commandString, connection);
-            command.Parameters.AddRange(new[]
-            {
-                new SqliteParameter("@head", item.TaskStageHeader),
-                new SqliteParameter("@desc", item.TaskStageDesc),
-                new SqliteParameter("@finish", item.IsCompleted),
-                new SqliteParameter("@id_task", id_task)
-            });
-            command.ExecuteNonQuery();
-            connection.Close();
-        }
-
-        public void RemoveStage(int itemId)
-        {
-            using var connection = new SqliteConnection($"Data Source={DbPath}");
-            connection.Open();
-
-            using var command = new SqliteCommand("DELETE FROM Stages WHERE id = @id", connection);
-            command.Parameters.AddWithValue("@id", itemId);
-            command.ExecuteNonQuery();
-            connection.Close();
-        }
-
-        public void RewriteStage(int oldItemId, TaskStageItem newItem, int id_task)
-        {
-            using var connection = new SqliteConnection($"Data Source={DbPath}");
-            connection.Open();
-
-            var commandString = "UPDATE Stages SET " +
-                                "Header = @head," +
-                                "Desc = @desc," +
-                                "IsCompleted = @completed," +
-                                "id_task = @id_task " +
-                                "WHERE id = @id";
-            using var command = new SqliteCommand(commandString, connection);
-            command.Parameters.AddRange(new[]
-            {
-                new SqliteParameter("@id", oldItemId),
-                new SqliteParameter("@head", newItem.TaskStageHeader),
-                new SqliteParameter("@desc", newItem.TaskStageDesc),
-                new SqliteParameter("@completed", newItem.IsCompleted),
-                new SqliteParameter("id_task", id_task)
-            });
-            command.ExecuteNonQuery();
-            connection.Close();
-        }
-
-        //*******************************************************
         public Color GetCategoryColorById(int id)
         {
             var result = new Color();
@@ -447,6 +211,36 @@ namespace NewTaskNote
         }
 
         //*******************************************************
+        //notes commands
+        public ObservableCollection<NoteItem> GetNotes()
+        {
+            ObservableCollection<NoteItem> result = [];
+            using var connection = new SqliteConnection($"Data Source={DbPath}");
+            connection.Open();
+
+            var commandString = "SELECT * FROM Notes";
+            using var command = new SqliteCommand(commandString, connection);
+            var reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                NoteItem note = new() 
+                {
+                    id = reader.GetInt32(0),
+                    NoteText = reader.GetString(1),
+                    IsFavorite = reader.GetBoolean(2),
+                    Category = new CategoryNote()
+                    {
+                        ID = reader.GetInt32(3),
+                        NameCategory = GetCategoryNameById(reader.GetInt32(3)),
+                        Color = GetCategoryColorById(reader.GetInt32(3))
+                    }
+                };
+                result.Add(note);
+            }
+            connection.Close();
+
+            return result;
+        }
         public void AddNote(NoteItem item)
         {
             using var connection = new SqliteConnection($"Data Source={DbPath}");
@@ -504,5 +298,185 @@ namespace NewTaskNote
         }
 
         //*******************************************************
+        //tasks commands
+        public ObservableCollection<TaskItem> GetTasks()
+        {
+            var result = new ObservableCollection<TaskItem>();
+            using var connection = new SqliteConnection($"Data Source={DbPath}");
+            connection.Open();
+
+            using var command = new SqliteCommand("SELECT * FROM Tasks", connection);
+            var reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                var item = new TaskItem()
+                {
+                    id = Int32.Parse(reader.GetInt64(0).ToString()),
+                    ModDate = reader.GetDateTime(1),
+                    TaskHeader = reader.GetString(2),
+                    TaskDesc = reader.GetString(3),
+                    IsFavorite = reader.GetBoolean(4),
+                    IsAlarmed = reader.GetBoolean(5),
+                    AlarmDate = reader.GetDateTime(6)
+                };
+                item.AllStages = GetStages(item.id);
+                result.Add(item);
+            }
+            connection.Close();
+            return result;
+        }
+
+        public void AddTask(TaskItem item)
+        {
+            using var connection = new SqliteConnection($"Data Source={DbPath}");
+            connection.Open();
+
+            var commandString = "INSERT INTO Tasks(ModDate, Header, Desc, IsFavorite, IsAlarmed, AlarmDate) " +
+                                "VALUES(@modDate, @header, @desc, @fav, @isAlarmed, @AlarmDate)";
+            using var command = new SqliteCommand(commandString, connection);
+            command.Parameters.AddRange(new[]
+            {
+                new SqliteParameter("@modDate", item.ModDate),
+                new SqliteParameter("@header", item.TaskHeader),
+                new SqliteParameter("@desc", item.TaskDesc),
+                new SqliteParameter("@fav", item.IsFavorite),
+                new SqliteParameter("@isAlarmed", item.IsAlarmed),
+                new SqliteParameter("@AlarmDate", item.AlarmDate)
+            });
+            command.ExecuteNonQuery();
+            connection.Close();
+        }
+
+        public void RemoveTask(TaskItem item)
+        {
+            using var connection = new SqliteConnection($"Data Source={DbPath}");
+            connection.Open();
+            foreach(var stage in item.AllStages)
+            {
+                RemoveStage(stage.id);
+            }
+            using var command = new SqliteCommand("DELETE FROM Tasks WHERE Id = @id", connection);
+            command.Parameters.AddWithValue("@id", item.id);
+            command.ExecuteNonQuery();
+
+            connection.Close();
+        }
+
+        public void RewriteTask(int oldItemId, TaskItem newItem)
+        {
+            using var connection = new SqliteConnection($"Data Source={DbPath}");
+            connection.Open();
+            var commandString = "UPDATE Tasks SET " +
+                                "ModDate = @modDate," +
+                                "Header = @head," +
+                                "Desc = @desc," +
+                                "IsFavorite = @fav," +
+                                "IsAlarmed = @alarm," +
+                                "AlarmDate = @alarmDate " +
+                                "WHERE Id = @id";
+            using var command = new SqliteCommand(commandString, connection);
+            command.Parameters.AddRange(new[]
+            {
+                new SqliteParameter("@id", oldItemId),
+                new SqliteParameter("@modDate", newItem.ModDate),
+                new SqliteParameter("@head",newItem.TaskHeader),
+                new SqliteParameter("@desc", newItem.TaskDesc),
+                new SqliteParameter("fav", newItem.IsFavorite),
+                new SqliteParameter("@alarm",newItem.IsAlarmed),
+                new SqliteParameter("@alarmDate", newItem.AlarmDate)
+            });
+            command.ExecuteNonQuery();
+            foreach(var stage in newItem.AllStages)
+            {
+                RewriteStage(stage.id, stage, oldItemId);
+            }
+            connection.Close();
+        }
+        //*******************************************************
+        //stages commands
+        public ObservableCollection<TaskStageItem> GetStages(int id_task)
+        {
+            var result = new ObservableCollection<TaskStageItem>();
+
+            using var connection = new SqliteConnection($"Data Source={DbPath}");
+            connection.Open();
+
+            var commandString = "SELECT * FROM Stages WHERE id_task = @id";
+            using var command = new SqliteCommand(commandString, connection);
+            command.Parameters.AddWithValue("@id", id_task);
+            using var commandCount = new SqliteCommand("SELECT count(Id) FROM Stages", connection);
+            var count = Convert.ToInt64(commandCount.ExecuteScalar());
+            if (count > 0)
+            {
+                var reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    result.Add(new TaskStageItem()
+                    {
+                        id = Int32.Parse(reader.GetInt64(0).ToString()),
+                        TaskStageHeader = reader.GetString(1),
+                        TaskStageDesc = reader.GetString(2),
+                        IsCompleted = reader.GetBoolean(3)
+                    });
+                }
+            }            
+            connection.Close();
+            return result;
+        }
+
+        public async void AddStage(TaskStageItem item, int id_task)
+        {
+            using var connection = new SqliteConnection($"Data Source={DbPath}");
+            connection.Open();
+
+            var commandString = "INSERT INTO Stages(Header, Desc, IsCompleted, id_task) " +
+                                "VALUES(@head, @desc, @finish, @id_task)";
+            using var command = new SqliteCommand( commandString, connection);
+            command.Parameters.AddRange(new[]
+            {
+                new SqliteParameter("@head", item.TaskStageHeader),
+                new SqliteParameter("@desc", item.TaskStageDesc),
+                new SqliteParameter("@finish", item.IsCompleted),
+                new SqliteParameter("@id_task", id_task)
+            });
+            var test = await command.ExecuteNonQueryAsync();
+            Console.WriteLine("Количество затронутых строк: " + test);
+            connection.Close();
+        }
+
+        public void RemoveStage(int itemId)
+        {
+            using var connection = new SqliteConnection($"Data Source={DbPath}");
+            connection.Open();
+
+            using var command = new SqliteCommand("DELETE FROM Stages WHERE id = @id", connection);
+            command.Parameters.AddWithValue("@id", itemId);
+            command.ExecuteNonQuery();
+            connection.Close();
+        }
+
+        public void RewriteStage(int oldItemId, TaskStageItem newItem, int id_task)
+        {
+            using var connection = new SqliteConnection($"Data Source={DbPath}");
+            connection.Open();
+
+            var commandString = "UPDATE Stages SET " +
+                                "Header = @head," +
+                                "Desc = @desc," +
+                                "IsCompleted = @completed," +
+                                "id_task = @id_task " +
+                                "WHERE id = @id";
+            using var command = new SqliteCommand(commandString, connection);
+            command.Parameters.AddRange(new[]
+            {
+                new SqliteParameter("@id", oldItemId),
+                new SqliteParameter("@head", newItem.TaskStageHeader),
+                new SqliteParameter("@desc", newItem.TaskStageDesc),
+                new SqliteParameter("@completed", newItem.IsCompleted),
+                new SqliteParameter("id_task", id_task)
+            });
+            command.ExecuteNonQuery();
+            connection.Close();
+        }
     }
 }

@@ -1,29 +1,46 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="NewTaskNote.SettingsPage">
-    <Grid RowDefinitions="Auto, *, Auto">
+             x:Class="NewTaskNote.SettingsPage"
+             Appearing="ContentPage_Appearing">
+    <Grid 
+        RowDefinitions="Auto,Auto, Auto,Auto, Auto, *">
         <Grid Grid.Row="0"
-              BackgroundColor="LightGray">
+              BackgroundColor="{AppThemeBinding Light={StaticResource Gray100},Dark={StaticResource Gray500}}">
             <Label Text="Настройки"
                    HorizontalOptions="Start"
                    VerticalOptions="Center"
                    Grid.Row="0"
                    Margin="15,0,0,0"
-                   FontSize="Large" />
+                   FontSize="Large"/>
         </Grid>
         <Grid Grid.Row="1"
-              RowDefinitions="Auto, Auto">
-            <Picker x:Name="FontPicker"
-                    Grid.Row="0"
-                    Title="Шрифт:"/>
+              RowDefinitions="Auto">
             <Picker x:Name="ThemePicker"
-                    Grid.Row="1"
+                    Grid.Row="0"
                     Title="Тема приложения:"/>
         </Grid>
+        <Button Grid.Row="2"
+                x:Name="InsertSamplesNotes"
+                Text="Вставить примеры заметок"
+                Clicked="InsertSamplesNotes_Clicked"
+                Margin="5"
+                />
+        <Button Grid.Row="3"
+                x:Name="InsertSamplesTasks"
+                Text="Вставить примеры задач"
+                Margin="5"
+                Clicked="InsertSamplesTasks_Clicked" />
+        <Button Grid.Row="4"
+                x:Name="ClearDB_button"
+                Text="Очистить базу данных"
+                Margin="5"
+                Clicked="ClearDB_button_Clicked" />
         <Button 
             x:Name="SaveButton"
             Text="Сохранить изменения"
-            Grid.Row="2"/>
+            Grid.Row="5"
+            VerticalOptions="End"
+            Clicked="SaveButton_Clicked"/>
     </Grid>
 </ContentPage>

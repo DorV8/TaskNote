@@ -13,7 +13,6 @@ public partial class NotePage : ContentPage
     public NotePage()
 	{
         InitializeComponent();
-        GetCategoryOptions();
         instanse.Data.EditedNote = new NoteItem();
         DeleteButton.IsVisible = false;
         ModDateLabel.IsVisible = false;
@@ -21,7 +20,6 @@ public partial class NotePage : ContentPage
     public NotePage(NoteItem note)
     {
         InitializeComponent();
-        GetCategoryOptions();
         instanse.Data.CurrentNote = note;
         instanse.Data.EditedNote = note;
     }
@@ -38,7 +36,8 @@ public partial class NotePage : ContentPage
     {
         editedNote = instanse.Data.EditedNote;
         currentNote = instanse.Data.CurrentNote;
-        CategoryPicker.SelectedIndex = editedNote.IsNullOrDefault() ?
+        GetCategoryOptions();
+        CategoryPicker.SelectedIndex = editedNote.NoteText == "" ?
                                        CategoryPicker.SelectedIndex = CategoryPicker.Items.Count() - 1 :
                                        (int)editedNote.Category.ID - 1;
         this.BindingContext = editedNote;
@@ -53,17 +52,43 @@ public partial class NotePage : ContentPage
         {
             if (instanse.Data.CurrentNote.IsNullOrDefault())
             {
-                instanse.Data.AddNote(editedNote);
-                instanse.Data.database.AddNote(editedNote);
+                try
+                {
+                    instanse.Data.AddNote(editedNote);
+                    instanse.Data.database.AddNote(editedNote);
+                    var toast = Toast.Make("Заметка создана", ToastDuration.Short, 14);
+                    toast.Show();
+                }
+                catch
+                {
+                    var toast = Toast.Make("Что-то пошло не так", ToastDuration.Short, 14);
+                    toast.Show();
+                }
+
             }
             else
             {
-                editedNote.ModDate = DateTime.Now;
-                instanse.Data.RewriteNote(currentNote, editedNote);
-                instanse.Data.database.RewriteNote(currentNote, editedNote);
+                try
+                {
+                    editedNote.ModDate = DateTime.Now;
+                    instanse.Data.RewriteNote(currentNote, editedNote);
+                    instanse.Data.database.RewriteNote(currentNote, editedNote);
+                    var toast = Toast.Make("Заметка сохранена", ToastDuration.Short, 14);
+                    toast.Show();
+                }
+                catch
+                {
+                    var toast = Toast.Make("Что-то пошло не так", ToastDuration.Short, 14);
+                    toast.Show();
+                }
             }
             Navigation.PopModalAsync();
             instanse.Data.EditedNote = null;
+        }
+        else
+        {
+            var toast = Toast.Make("Заметка должна содержать текст", ToastDuration.Long, 14);
+            toast.Show();
         }
     }
 
@@ -72,10 +97,18 @@ public partial class NotePage : ContentPage
         var answer = await DisplayAlert("Удаление", "Вы хотите удалить эту заметку?", "Да", "Нет");
         if (answer == true)
         {
-            instanse.Data.RemoveNote(currentNote);
-            instanse.Data.database.DeleteNote(currentNote);
-            DisplayAlert("Удаление", "Заметка была успешно удалена", "ОК");
-            Navigation.PopModalAsync();
+            try
+            {
+                instanse.Data.RemoveNote(currentNote);
+                instanse.Data.database.DeleteNote(currentNote);
+                DisplayAlert("Удаление", "Заметка была успешно удалена", "ОК");
+                Navigation.PopModalAsync();
+            }
+            catch
+            {
+                var toast = Toast.Make("Что-то пошло не так", ToastDuration.Short, 14);
+                toast.Show();
+            }
         }
     }
     private void SetFavorite()

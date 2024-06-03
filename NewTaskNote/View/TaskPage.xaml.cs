@@ -42,8 +42,10 @@ public partial class TaskPage : ContentPage
                     TaskStageHeader = name,
                     TaskStageDesc = desc
                 };
-                editedTask.AddStage(item);
                 instanse.Data.database.AddStage(item, currentTask.id);
+                editedTask.AddStage(item);
+                var toast = Toast.Make("Этап создан", ToastDuration.Short, 14);
+                toast.Show();
             }
         }
         catch { }
@@ -163,8 +165,18 @@ public partial class TaskPage : ContentPage
         var answer = await DisplayAlert("Удаление", "Хотите удалить эту подзадачу?", "Да", "Нет");
         if (answer == true)
         {
-            editedTask.RemoveStage(item);
-            instanse.Data.database.RemoveStage(item.id);
+            try
+            {
+                editedTask.RemoveStage(item);
+                instanse.Data.database.RemoveStage(item.id);
+                var toast = Toast.Make("Этап удалён", ToastDuration.Short, 14);
+                toast.Show();
+            }
+            catch 
+            {
+                var toast = Toast.Make("Что-то пошло не так", ToastDuration.Short, 14);
+                toast.Show();
+            }
         }
     }
 }

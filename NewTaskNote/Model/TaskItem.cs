@@ -20,7 +20,22 @@ namespace NewTaskNote
         {
             get
             {
-                return IsFinished == false ? Color.FromArgb("#FFFFFF") : Color.FromArgb("#98FB98");
+                if (IsFinished)
+                {
+                    return Color.FromArgb("#409945");
+                }
+                else
+                {
+                    if (App.Current.UserAppTheme == AppTheme.Light)
+                    {
+                        return Color.FromArgb("#FFFFFF");
+                    }
+                    else
+                    {
+                        return Color.FromArgb("404040");
+                    }
+                }
+                return (IsFinished == false)  ? Color.FromArgb("#FFFFFF") : Color.FromArgb("#98FB98");
             }
         }
         public bool IsFavorite { get; set; }

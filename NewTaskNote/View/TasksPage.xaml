@@ -6,7 +6,7 @@
     <Grid RowDefinitions="Auto, *, Auto">
         <Grid Grid.Row="0"
               RowDefinitions="Auto"
-              BackgroundColor="LightGray">
+              BackgroundColor="{AppThemeBinding Light={StaticResource Gray100},Dark={StaticResource Gray500}}">
             <Label Text="Задачи"
                    HorizontalOptions="Start"
                    Grid.Row="0"

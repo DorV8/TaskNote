@@ -9,28 +9,12 @@ namespace NewTaskNote
         public DatabaseContext database;
 
         //****************************************************
-
-        public List<Font> fonts = [];//добавить шрифты
-
-        private void SetFonts()
-        {
-        }
-
-        public List<string> fontNames
-        {
-            get
-            {
-                var result = new List<string>();
-                foreach (var font in fonts)
-                {
-                    result.Add(font.Family);
-                }
-                return result;
-            }
-        }
-
-        //****************************************************
         public List<CategoryNote> categorys { get; private set; }
+        private void SetCategorys()
+        {
+            categorys = database.GetCategorys();
+        }
+        //****************************************************
         private static ObservableCollection<NoteItem> GetReverse(ObservableCollection<NoteItem> collection)
         {
             var result = new ObservableCollection<NoteItem>();
@@ -42,20 +26,13 @@ namespace NewTaskNote
 
             return result;
         }
-        private void SetCategorys()
-        {
-            categorys = database.GetCategorys();
-        }
-
+        
         //****************************************************
 
         public ObservableCollection<NoteItem> AllNotes { get; set; }
         public ObservableCollection<NoteItem> ReversedAllNotes
         {
-            get
-            {
-                return GetReverse(AllNotes);
-            }
+            get { return GetReverse(AllNotes); }
         }
 
         public ObservableCollection<NoteItem> SelectedNotes { get; set; }

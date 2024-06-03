@@ -93,9 +93,7 @@ public partial class NotesPage : ContentPage
     }
     private void SortNotes()
     {
-        int ID = /*MenuPicker.SelectedIndex == MenuPicker.Items.Count - 1 ?
-                                         CategoryNote.CategoryNoteID.Undefined:*/
-                                         MenuPicker.SelectedIndex +1;
+        int ID = MenuPicker.SelectedIndex +1;
         instanse.Data.SortNotes(ID, SearchEntry.Text);
         NotesList.ItemsSource = instanse.Data.ReversedSelectedNotes;
     }

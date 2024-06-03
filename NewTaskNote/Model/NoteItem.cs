@@ -1,4 +1,6 @@
 ﻿using Commons;
+using System.Drawing;
+using Color = Microsoft.Maui.Graphics.Color;
 
 namespace NewTaskNote
 {
@@ -34,7 +36,24 @@ namespace NewTaskNote
         }
 
         public CategoryNote Category = new();
-        public Color Color { get { return Category.Color; } }
+        public Color Color
+        {
+            get
+            {
+                if (App.Current.UserAppTheme == AppTheme.Light)
+                {
+                    return Category.Color;
+                }
+                else
+                {
+                    if (App.Current.UserAppTheme == AppTheme.Dark)
+                    {
+                        return Category.NameCategory.Contains("Без") ? Color.FromArgb("#404040") : Category.Color;
+                    }
+                }
+                return Color.FromArgb("#FFFFFF");
+            }
+        }
 
         public NoteItem()
         {
