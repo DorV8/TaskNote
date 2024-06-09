@@ -1,11 +1,19 @@
-﻿
-using System.Collections.ObjectModel;
-using Font = Microsoft.Maui.Font;
+﻿using System.Collections.ObjectModel;
 
 namespace NewTaskNote
 {
     public class ModelData
     {
+        //****************************************************
+
+        public void ClearData()
+        {
+            AllNotes.Clear();
+            AllTasks.Clear();
+        }
+
+        //****************************************************
+
         public DatabaseContext database;
 
         //****************************************************
@@ -55,7 +63,7 @@ namespace NewTaskNote
                 return new ObservableCollection<TaskItem>(AllTasks.OrderBy(c => c.IsFinished));
             }
         }
-        
+        public ObservableCollection<TaskItem> SelectedTasks { get; private set; }
         public TaskItem CurrentTask { get; set; }
 
         public TaskItem EditedTask { get; set; }
@@ -149,6 +157,13 @@ namespace NewTaskNote
         {
             var index = AllTasks.IndexOf(oldItem);
             AllTasks[index] = newItem;
+        }
+
+        public void SortTasks()
+        {
+            IEnumerable<TaskItem> filtered = null;
+            filtered = AllTasks.Where(task => task.IsFavorite == true);
+            SelectedTasks = new ObservableCollection<TaskItem>(filtered);
         }
     }
 }

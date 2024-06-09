@@ -46,6 +46,14 @@ public partial class SettingsPage : ContentPage
 
     private void ClearDB_button_Clicked(object sender, EventArgs e)
     {
-        instanse.Data.database.ClearData();
+        try
+        {
+            instanse.Data.database.ClearData();
+            instanse.Data.ClearData();
+        }
+        catch
+        {
+            Console.WriteLine("Ошибка при очищении БД");
+        }
     }
 }

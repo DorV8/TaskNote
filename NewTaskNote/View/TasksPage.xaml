@@ -5,14 +5,19 @@
              Appearing="ContentPage_Appearing">
     <Grid RowDefinitions="Auto, *, Auto">
         <Grid Grid.Row="0"
-              RowDefinitions="Auto"
+              ColumnDefinitions="*, *"
               BackgroundColor="{AppThemeBinding Light={StaticResource Gray100},Dark={StaticResource Gray500}}">
             <Label Text="Задачи"
                    HorizontalOptions="Start"
-                   Grid.Row="0"
+                   Grid.Column="0"
                    VerticalOptions="Center"
                    Margin="15,0,0,0"
                    FontSize="Large" />
+            <Picker Title="Сортировка"
+                    x:Name="MenuPicker"
+                    Grid.Column="1"
+                    HorizontalOptions="EndAndExpand"
+                    SelectedIndexChanged="MenuPicker_SelectedIndexChanged" />
         </Grid>
         <ScrollView Grid.Row="1">
             <ListView x:Name="TasksList"

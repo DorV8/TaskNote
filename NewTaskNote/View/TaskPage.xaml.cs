@@ -31,12 +31,12 @@ public partial class TaskPage : ContentPage
 
     private async void AddStageButton_Clicked(object sender, EventArgs e)
     {
-        var name = await DisplayPromptAsync("Создание задачи", "Введите название задачи:", "ОК", "Отмена");
+        var name = await DisplayPromptAsync("Создание этапа", "Введите название этапа:", "ОК", "Отмена");
         try
         {
             if ((name !="") && (name != null))
             {
-                var desc = await DisplayPromptAsync("Создание задачи", "Введите описание задачи:", "ОК", "Отмена");
+                var desc = await DisplayPromptAsync("Создание этапа", "Введите описание этапа:", "ОК", "Отмена");
                 var item = new TaskStageItem()
                 {
                     TaskStageHeader = name,

@@ -58,8 +58,14 @@ public partial class TasksPage : ContentPage
     private void ContentPage_Appearing(object sender, EventArgs e)
     {
         TasksList.ItemsSource = instanse.Data.OrderedAllTasks;
+        AddCategorys();
     }
-
+    private void AddCategorys()
+    {
+        MenuPicker.Items.Clear();
+        MenuPicker.Items.Add("Все задачи");
+        MenuPicker.Items.Add("Избранные");
+    }
     private async void DeleteTaskMenuItem_Clicked(object sender, EventArgs e)
     {
         var param = ((MenuItem)sender).CommandParameter as TaskItem;
@@ -78,6 +84,23 @@ public partial class TasksPage : ContentPage
                 toast.Show();
             }
             TasksList.ItemsSource = instanse.Data.OrderedAllTasks;
+        }
+    }
+
+    private void MenuPicker_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        switch (MenuPicker.SelectedIndex)
+        {
+            case -1:
+                TasksList.ItemsSource = instanse.Data.AllTasks;
+                break;
+            case 0:
+                TasksList.ItemsSource = instanse.Data.AllTasks;
+                break;
+            case 1:
+                instanse.Data.SortTasks();
+                TasksList.ItemsSource = instanse.Data.SelectedTasks;
+                break;
         }
     }
 }

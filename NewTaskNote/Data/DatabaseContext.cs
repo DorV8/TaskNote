@@ -26,16 +26,30 @@ namespace NewTaskNote
 
         public void ClearData()
         {
-            /*using var connection = new SqliteConnection($"Data Source={DbPath}");
-            connection.Open();
-
-            var commandString = "DELETE FROM Notes";
-
-            using var command = new SqliteCommand(commandString, connection);
-
-            connection.Close();*/
+            List<string> names = [
+                "Notes","Stages", "Tasks"
+            ];
+            foreach (string name in names)
+            {
+                try
+                {
+                    ClearTable(name);
+                }
+                catch
+                {
+                    Console.WriteLine("ошибка при очищении таблицы");
+                }
+            }
         }
-
+        private void ClearTable(string tableName) 
+        {
+            using var connection = new SqliteConnection($"Data Source={DbPath}");
+            connection.Open();
+            var commandString = "DELETE FROM " + tableName;
+            using var command = new SqliteCommand(commandString, connection);
+            command.ExecuteNonQuery();
+            connection.Close();
+        }
         //*******************************************************
         //Creating tables
         private void CreateTable(string commandString)
